@@ -1,368 +1,312 @@
-<!DOCTYPE html>
-<html lang="zh">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>THTI 德州扑克人格测试</title>
-<style>*{box-sizing:border-box;margin:0;padding:0}
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>THTI 德州扑克人格测试 v6</title><style>*{box-sizing:border-box;margin:0;padding:0}
 body{background:#1a1208;color:#e8d5a3;font-family:'Georgia',serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:20px}
-.suit{color:#d4a017;font-size:1.1em}.suit.red{color:#c0392b}
-#screen-home{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:90vh;text-align:center;max-width:600px}
-.home-suits{font-size:2.5rem;letter-spacing:8px;margin-bottom:20px}
+
+/* HOME */
+#screen-home{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:90vh;text-align:center;max-width:600px;width:100%}
+.home-suits{font-size:2.5rem;letter-spacing:8px;margin-bottom:20px;color:#d4a017}
 .home-title{font-size:2.8rem;font-weight:bold;color:#d4a017;letter-spacing:4px;margin-bottom:8px}
 .home-sub{font-size:1.1rem;color:#b8942e;margin-bottom:24px;letter-spacing:2px}
 .home-tagline{font-size:1rem;color:#c8b87a;line-height:1.8;margin-bottom:40px;padding:0 20px}
 .btn-start{background:linear-gradient(135deg,#d4a017,#8b6914);color:#1a1208;border:none;padding:16px 48px;font-size:1.2rem;font-weight:bold;border-radius:4px;cursor:pointer;letter-spacing:3px;transition:all .3s}
-.btn-start:hover{background:linear-gradient(135deg,#f0c040,#a07820);transform:translateY(-2px);box-shadow:0 6px 20px rgba(212,160,23,.4)}
-#screen-quiz{display:none;width:100%;max-width:720px}
-.progress-wrap{background:#2a1f08;border-radius:8px;height:8px;margin-bottom:24px;overflow:hidden}
-.progress-bar{height:100%;background:linear-gradient(90deg,#d4a017,#f0c040);border-radius:8px;transition:width .4s}
-.progress-text{color:#b8942e;font-size:.85rem;text-align:right;margin-bottom:6px}
-.q-card{background:linear-gradient(160deg,#2a1e0a,#1f1506);border:1px solid #3a2c10;border-radius:12px;padding:28px;margin-bottom:24px}
-.q-tag{display:inline-block;background:#3a2c10;color:#d4a017;font-size:.75rem;padding:3px 10px;border-radius:3px;margin-bottom:14px;letter-spacing:1px}
-.q-context{background:#1a1208;border-left:3px solid #d4a017;padding:14px 16px;border-radius:0 6px 6px 0;margin-bottom:16px;font-size:.92rem;line-height:1.7;color:#e0cc90}
-.q-context .cards{font-size:1.1rem;letter-spacing:2px;color:#f0e0a0}
-.q-ask{font-size:1rem;color:#e8d5a3;margin-bottom:16px;font-weight:bold}
+.btn-start:hover{background:linear-gradient(135deg,#f0c030,#d4a017);transform:translateY(-2px)}
+.home-disclaimer{font-size:.75rem;color:#7a6a3a;margin-top:30px}
+
+/* NAMES SCREEN */
+#screen-names{display:none;flex-direction:column;align-items:center;justify-content:center;min-height:90vh;text-align:center;max-width:560px;width:100%;padding:20px}
+.names-title{font-size:1.5rem;color:#d4a017;margin-bottom:8px;font-weight:bold}
+.names-sub{font-size:.9rem;color:#b8942e;margin-bottom:28px;line-height:1.6}
+.name-input-group{width:100%;margin-bottom:16px;text-align:left}
+.name-label{font-size:.8rem;color:#b8942e;letter-spacing:1px;margin-bottom:6px;display:block}
+.name-badge{display:inline-block;padding:2px 8px;border-radius:3px;font-size:.7rem;font-weight:bold;margin-right:6px;vertical-align:middle}
+.badge-pro{background:#4a2060;color:#c080ff}
+.badge-fish{background:#1a3060;color:#60a0ff}
+.badge-mid{background:#1a4020;color:#60c060}
+.name-input{width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(212,160,23,.3);border-radius:6px;padding:12px 14px;color:#e8d5a3;font-size:.95rem;font-family:'Georgia',serif;outline:none;transition:border .2s}
+.name-input:focus{border-color:#d4a017}
+.name-input::placeholder{color:#5a4a2a}
+.names-divider{display:flex;align-items:center;gap:12px;margin:20px 0;color:#5a4a2a;font-size:.8rem}
+.names-divider::before,.names-divider::after{content:'';flex:1;height:1px;background:rgba(212,160,23,.15)}
+.btn-skip{background:transparent;border:1px solid rgba(212,160,23,.2);color:#7a6a3a;padding:10px 24px;font-size:.82rem;border-radius:4px;cursor:pointer;letter-spacing:1px;transition:all .3s;width:100%;margin-bottom:10px}
+.btn-skip:hover{border-color:rgba(212,160,23,.4);color:#b8942e}
+.btn-names-go{background:linear-gradient(135deg,#d4a017,#8b6914);color:#1a1208;border:none;padding:14px 40px;font-size:1rem;font-weight:bold;border-radius:4px;cursor:pointer;letter-spacing:2px;transition:all .3s;width:100%;margin-bottom:10px}
+.btn-names-go:hover{background:linear-gradient(135deg,#f0c030,#d4a017)}
+
+/* INTRO */
+#screen-intro{display:none;flex-direction:column;align-items:center;justify-content:center;min-height:90vh;text-align:center;max-width:600px;width:100%;padding:20px}
+.intro-deco{font-size:3rem;margin-bottom:20px}
+.intro-title{font-size:1.6rem;color:#d4a017;margin-bottom:24px;font-weight:bold}
+.intro-body{font-size:.95rem;color:#c8b87a;line-height:1.9;margin-bottom:32px;text-align:left}
+.intro-rules{background:rgba(212,160,23,.08);border:1px solid rgba(212,160,23,.2);border-radius:8px;padding:16px 20px;margin-bottom:32px;text-align:left}
+.intro-rules p{font-size:.88rem;color:#b8942e;line-height:1.8}
+.btn-deal{background:linear-gradient(135deg,#c0392b,#8b1a0e);color:#fff;border:none;padding:16px 48px;font-size:1.1rem;font-weight:bold;border-radius:4px;cursor:pointer;letter-spacing:3px;transition:all .3s}
+.btn-deal:hover{background:linear-gradient(135deg,#e74c3c,#c0392b);transform:translateY(-2px)}
+
+/* QUIZ */
+#screen-quiz{display:none;width:100%;max-width:640px}
+.prog-wrap{position:sticky;top:0;background:#1a1208;padding:12px 0 8px;z-index:10;border-bottom:1px solid rgba(212,160,23,.15);margin-bottom:20px}
+.prog-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.prog-label{font-size:.8rem;color:#b8942e;letter-spacing:1px}
+.prog-count{font-size:.8rem;color:#d4a017;font-weight:bold}
+.prog-track{background:rgba(255,255,255,.1);border-radius:4px;height:4px;width:100%}
+.prog-fill{background:linear-gradient(90deg,#d4a017,#c0392b);height:4px;border-radius:4px;transition:width .4s ease;width:0%}
+.q-card{background:rgba(255,255,255,.03);border:1px solid rgba(212,160,23,.2);border-radius:12px;padding:24px;margin-bottom:16px}
+.q-dim{font-size:.7rem;color:#d4a017;letter-spacing:3px;text-transform:uppercase;margin-bottom:4px;opacity:.7}
+.q-tag{font-size:.85rem;color:#b8942e;margin-bottom:12px;font-style:italic}
+.q-context{font-size:.88rem;color:#c8b87a;line-height:1.8;margin-bottom:16px;padding:12px;background:rgba(0,0,0,.2);border-radius:6px;border-left:3px solid rgba(212,160,23,.3)}
+.q-ask{font-size:1rem;color:#e8d5a3;font-weight:bold;margin-bottom:16px}
 .options{display:flex;flex-direction:column;gap:10px}
-.opt-btn{background:#241a06;border:1px solid #3a2c10;color:#c8b87a;padding:13px 18px;border-radius:6px;cursor:pointer;text-align:left;font-size:.93rem;transition:all .2s;line-height:1.5}
-.opt-btn:hover{border-color:#d4a017;background:#2e2208;color:#e8d5a3}
-.opt-btn.selected{border-color:#d4a017;background:linear-gradient(135deg,#3a2c10,#2a1e08);color:#f0e0a0;font-weight:bold}
-.opt-btn .opt-tag{display:inline-block;background:#d4a017;color:#1a1208;font-size:.7rem;padding:2px 7px;border-radius:2px;margin-right:8px;font-weight:bold;letter-spacing:.5px}
-.opt-btn .opt-tag.fold{background:#8b2020}.opt-btn .opt-tag.call{background:#1a5c2a}.opt-btn .opt-tag.raise{background:#8b6914}.opt-btn .opt-tag.check{background:#2a4a6a}.opt-btn .opt-tag.allin{background:#6a0a0a}
-.quiz-nav{display:flex;justify-content:space-between;align-items:center;margin-top:8px}
-.btn-nav{background:transparent;border:1px solid #3a2c10;color:#b8942e;padding:10px 24px;border-radius:4px;cursor:pointer;font-size:.9rem;transition:all .2s}
-.btn-nav:hover{border-color:#d4a017;color:#d4a017}
-.btn-nav:disabled{opacity:.3;cursor:default}
-.btn-submit{background:linear-gradient(135deg,#d4a017,#8b6914);color:#1a1208;border:none;padding:12px 36px;border-radius:4px;cursor:pointer;font-size:1rem;font-weight:bold;display:none;letter-spacing:2px;transition:all .3s}
-.btn-submit:hover{background:linear-gradient(135deg,#f0c040,#a07820);transform:translateY(-1px)}
+.opt-btn{background:rgba(255,255,255,.04);border:1px solid rgba(212,160,23,.25);border-radius:8px;padding:12px 16px;cursor:pointer;text-align:left;color:#c8b87a;font-size:.88rem;line-height:1.6;transition:all .25s;display:flex;align-items:flex-start;gap:12px}
+.opt-btn:hover:not(:disabled){background:rgba(212,160,23,.1);border-color:rgba(212,160,23,.5);color:#e8d5a3;transform:translateX(3px)}
+.opt-btn:disabled{cursor:default}
+.opt-btn.selected{background:rgba(212,160,23,.15);border-color:#d4a017;color:#e8d5a3}
+.opt-btn.locked{opacity:.55}
+.opt-tag{display:inline-block;min-width:58px;padding:2px 8px;border-radius:4px;font-size:.72rem;font-weight:bold;letter-spacing:1px;text-align:center;flex-shrink:0;margin-top:2px}
+.fold{background:#4a1a1a;color:#e74c3c;border:1px solid #8b2a2a}
+.check{background:#1a3a4a;color:#3498db;border:1px solid #2a5a7a}
+.call{background:#1a3a1a;color:#2ecc71;border:1px solid #2a6a2a}
+.raise{background:#3a2a0a;color:#f39c12;border:1px solid #7a5a0a}
+.allin{background:#3a0a3a;color:#e056fd;border:1px solid #7a0a7a}
+.btn-submit{display:none;background:linear-gradient(135deg,#d4a017,#8b6914);color:#1a1208;border:none;padding:16px 40px;font-size:1.1rem;font-weight:bold;border-radius:4px;cursor:pointer;width:100%;letter-spacing:2px;margin:20px 0;transition:all .3s}
 .btn-submit.visible{display:block}
-#screen-result{display:none;width:100%;max-width:680px;padding-bottom:40px}
-.result-header{text-align:center;padding:40px 20px 24px}
-.result-emoji{font-size:4rem;margin-bottom:16px}
-.result-type-cn{font-size:2.4rem;font-weight:bold;color:#d4a017;margin-bottom:4px}
-.result-type-code{font-size:1.1rem;color:#b8942e;letter-spacing:3px;margin-bottom:8px}
-.result-match{font-size:.95rem;color:#a08040;margin-bottom:20px}
-.score-board{background:linear-gradient(160deg,#2a1e0a,#1f1506);border:1px solid #3a2c10;border-radius:12px;padding:24px;margin-bottom:20px}
-.score-title{color:#d4a017;font-size:1rem;font-weight:bold;letter-spacing:2px;margin-bottom:20px;text-align:center}
-.score-row{display:flex;align-items:center;margin-bottom:14px;gap:12px}
-.score-label{color:#c8b87a;font-size:.85rem;width:110px;flex-shrink:0}
-.score-bar-wrap{flex:1;background:#1a1208;border-radius:4px;height:10px;overflow:hidden}
-.score-bar-fill{height:100%;border-radius:4px;transition:width 1s ease}
-.score-val{color:#d4a017;font-weight:bold;font-size:.9rem;width:36px;text-align:right;flex-shrink:0}
-.type-box{background:linear-gradient(160deg,#2a1e0a,#1f1506);border:1px solid #3a2c10;border-radius:12px;padding:24px;margin-bottom:20px}
-.type-funny{color:#c0392b;font-size:1.05rem;font-style:italic;margin-bottom:14px;line-height:1.7}
-.type-desc{color:#c8b87a;font-size:.93rem;line-height:1.8}
-.dim-box{background:linear-gradient(160deg,#2a1e0a,#1f1506);border:1px solid #3a2c10;border-radius:12px;padding:24px;margin-bottom:20px}
-.dim-title{color:#d4a017;font-size:.95rem;font-weight:bold;letter-spacing:2px;margin-bottom:16px}
-.dim-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;font-size:.88rem}
-.dim-name{color:#b8942e;width:130px}
-.dim-bar-wrap{flex:1;background:#1a1208;border-radius:3px;height:8px;margin:0 12px;overflow:hidden}
-.dim-bar-fill{height:100%;border-radius:3px}
-.dim-score{color:#d4a017;font-weight:bold;font-size:.9rem;width:40px;text-align:right}
-.note-box{background:#1f1506;border:1px solid #2a1e0a;border-radius:8px;padding:16px 20px;margin-bottom:20px;font-size:.82rem;color:#8a7050;line-height:1.7;text-align:center}
-.author-box{text-align:center;padding:20px;color:#5a4820;font-size:.8rem;line-height:1.8}
-.btn-retry{background:transparent;border:1px solid #d4a017;color:#d4a017;padding:12px 36px;border-radius:4px;cursor:pointer;font-size:.95rem;margin-top:16px;letter-spacing:2px;transition:all .2s;display:block;margin-left:auto;margin-right:auto}
-.btn-retry:hover{background:#d4a017;color:#1a1208}
-#screen-intro{display:none;flex-direction:column;align-items:center;justify-content:center;min-height:90vh;text-align:center;max-width:580px;padding:0 24px}
-.intro-suits{font-size:1.8rem;letter-spacing:12px;margin-bottom:32px;opacity:.5}
-.intro-body{font-size:1.05rem;color:#c8b87a;line-height:2;margin-bottom:16px}
-.intro-body em{color:#d4a017;font-style:normal;font-weight:bold}
-.intro-body .punchline{color:#e8d5a3;font-size:1.15rem;display:block;margin-top:12px}
-.intro-chips{font-size:2rem;margin:28px 0;letter-spacing:6px;animation:chipFloat 3s ease-in-out infinite}
-@keyframes chipFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
-.intro-warn{font-size:.82rem;color:#6a5030;margin-bottom:32px;line-height:1.7;border-top:1px solid #2a1e0a;padding-top:16px}
-.btn-deal{background:linear-gradient(135deg,#d4a017,#8b6914);color:#1a1208;border:none;padding:16px 52px;font-size:1.15rem;font-weight:bold;border-radius:4px;cursor:pointer;letter-spacing:3px;transition:all .3s}
-.btn-deal:hover{background:linear-gradient(135deg,#f0c040,#a07820);transform:translateY(-2px);box-shadow:0 6px 20px rgba(212,160,23,.4)}
-/* Lock answered options */
-.opt-btn.selected.locked{cursor:default;pointer-events:none}
-.opt-btn.locked{opacity:.35;cursor:default;pointer-events:none}
-.opt-btn.selected.locked{opacity:1}
-/* Hide nav entirely */
-.quiz-nav.no-nav{display:none}
-</style>
-</head>
-<body>
+.group-label{text-align:center;font-size:.7rem;color:#7a6a3a;letter-spacing:3px;margin:20px 0 10px;padding:6px 0;border-top:1px solid rgba(212,160,23,.1)}
 
-<!-- Screen 0: Home -->
-<div id="screen-home">
-  <div class="home-suits">&#9824; <span class="red">&#9829;</span> <span class="red">&#9830;</span> &#9827;</div>
-  <div class="home-title">T H T I</div>
-  <div class="home-sub">Texas Hold'em Type Indicator</div>
-  <div class="home-tagline">
-    你在牌桌上是鲨鱼，还是提款机？<br>
-    是GTO信徒，还是脸帝本帝？<br><br>
-    30道真实牌局场景题，没有正确答案——<br>
-    只有最真实的你。<br><br>
-    <em style="color:#8a7050;font-size:.9rem">本测试不构成任何赌博建议。赢了别谢我，输了也别怪我。</em>
-  </div>
-  <button class="btn-start" onclick="thtiStart()">开始测试 &#9824;</button>
-</div>
+/* RESULT */
+#screen-result{display:none;width:100%;max-width:640px;padding-bottom:40px}
+.result-header{text-align:center;padding:32px 20px 16px}
+.result-label{font-size:.8rem;color:#b8942e;letter-spacing:4px;margin-bottom:8px}
 
-<!-- Screen 1: Intro / Atmosphere -->
-<div id="screen-intro">
-  <div class="intro-suits">&#9824; &#9829; &#9830; &#9827;</div>
-  <div class="intro-body">
-    想象一下，这是你最熟悉的牌桌——<br>
-    那个你知道哪张椅子最软、哪个位置出风口的牌桌。<br><br>
-    <em>带上你惯用的底池控制策略，</em><br>
-    <em>和那套"我只是玩玩而已"的借口，</em><br><br>
-    这是30手牌。没有冷静期，没有撤单，<br>
-    每一道题都是一次真实的决定。<br><br>
-    <span class="punchline">也许是测试，也许是照镜子——<br>反正你牌桌上什么样，这里就什么样。</span>
-  </div>
-  <div class="intro-chips">&#127920; &#127025; &#127920;</div>
-  <div class="intro-warn">
-    &#9824; 选完即锁定，无法返回上一题<br>
-    毕竟丢出去的筹码，拿不回来
-  </div>
-  <button class="btn-deal" onclick="thtiDeal()">发牌 — 开始 &#9824;</button>
-</div>
+/* === CHARACTER CARD - MBTI polygon style === */
+.char-card{border-radius:20px;overflow:hidden;margin:0 auto 20px;max-width:420px;box-shadow:0 24px 64px rgba(0,0,0,.6);position:relative}
+.char-card-bg{position:absolute;inset:0;z-index:0}
+.char-card-content{position:relative;z-index:1}
+/* Card top section with character art area */
+.char-art-area{height:260px;display:flex;align-items:flex-end;justify-content:center;padding-bottom:0;position:relative;overflow:hidden}
+.char-figure{width:200px;height:240px;position:relative;display:flex;align-items:flex-end;justify-content:center}
+/* Polygon character SVG art */
+.char-svg{width:100%;height:100%}
+/* Card info section */
+.char-info{background:rgba(0,0,0,.55);backdrop-filter:blur(8px);padding:20px 24px 24px;text-align:center;border-top:1px solid rgba(255,255,255,.1)}
+.char-group-badge{display:inline-block;padding:3px 12px;border-radius:12px;font-size:.68rem;font-weight:bold;letter-spacing:2px;margin-bottom:12px;border:1px solid}
+.char-name{font-size:2rem;font-weight:bold;color:#fff;letter-spacing:3px;margin-bottom:2px;text-shadow:0 2px 8px rgba(0,0,0,.5)}
+.char-code{font-size:.9rem;letter-spacing:5px;margin-bottom:10px;opacity:.8}
+.char-tagline{font-size:.82rem;color:rgba(255,255,255,.75);font-style:italic;line-height:1.6;max-width:300px;margin:0 auto 16px}
+/* Total score big display */
+.total-score-wrap{background:rgba(255,255,255,.08);border-radius:12px;padding:14px 20px;margin-bottom:0}
+.total-score-label{font-size:.7rem;letter-spacing:2px;opacity:.7;margin-bottom:4px}
+.total-score-val{font-size:2.8rem;font-weight:bold;line-height:1}
+.total-score-max{font-size:.9rem;opacity:.5;margin-left:4px;font-weight:normal}
+.total-score-rank{font-size:.75rem;margin-top:4px;opacity:.8}
 
-<!-- Screen 2: Quiz -->
-<div id="screen-quiz">
-  <div class="progress-text" id="prog-text">0 / 30</div>
-  <div class="progress-wrap"><div class="progress-bar" id="prog-bar" style="width:0%"></div></div>
-  <div id="q-area"></div>
-  <div class="quiz-nav">
-    <span></span>
-    <button class="btn-submit" id="btn-submit" onclick="thtiSubmit()">摊牌 — 查看结果 &#9824;</button>
-  </div>
-</div>
+/* Match bar */
+.match-section{padding:16px 24px 0}
+.match-bar-wrap{background:rgba(255,255,255,.12);border-radius:4px;height:6px;margin:6px 0 4px}
+.match-bar-fill{height:6px;border-radius:4px;transition:width 1s ease}
+.match-row{display:flex;justify-content:space-between;align-items:center;font-size:.75rem;color:rgba(255,255,255,.6)}
 
-<!-- Screen 3: Result -->
-<div id="screen-result">
-  <div class="result-header">
-    <div class="result-emoji" id="r-emoji"></div>
-    <div class="result-type-cn" id="r-name"></div>
-    <div class="result-type-code" id="r-code"></div>
-    <div class="result-match" id="r-match"></div>
-  </div>
-  <div class="score-board">
-    <div class="score-title">&#9658; 你的实战五维评分</div>
-    <div id="score-rows"></div>
-  </div>
-  <div class="type-box">
-    <div class="type-funny" id="r-funny"></div>
-    <div class="type-desc" id="r-desc"></div>
-  </div>
-  <div class="note-box">
-    &#9824; 本测试结果纯属娱乐，如有雷同，纯属你牌打得太可预测 &#9824;<br>
-    科学研究表明：看完测试结果后立刻去打牌的人，胜率提升0%
-  </div>
-  <div class="author-box">
-    THTI v4.1 · Texas Hold'em Type Indicator<br>
-    基于德州扑克实战场景的人格分析系统<br>
-    &#9824; &#9829; &#9830; &#9827;
-  </div>
-  <button class="btn-retry" onclick="thtiRetry()">重新测试</button>
-</div>
+/* Scores section */
+.scores-section{background:rgba(255,255,255,.03);border:1px solid rgba(212,160,23,.15);border-radius:12px;padding:20px;margin-bottom:16px}
+.scores-title{font-size:.8rem;color:#d4a017;letter-spacing:3px;margin-bottom:16px;text-align:center}
+.score-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.score-label{font-size:.8rem;color:#b8942e;width:80px;flex-shrink:0}
+.score-bar-wrap{flex:1;background:rgba(255,255,255,.08);border-radius:3px;height:6px}
+.score-bar-fill{height:6px;border-radius:3px;transition:width .8s ease}
+.score-val{font-size:.8rem;color:#e8d5a3;width:32px;text-align:right;flex-shrink:0}
 
-<script type="application/json" id="thti-q-data">[{"id":"pre1","dim":"PRE","tag":"翻前 · UTG位","ctx":"9人桌，$1/$2 现金局。你在UTG位，手牌 <span class=\"cards\">A♠ J♦</span>。所有人都有$200左右筹码。你左边是一个刚坐下20分钟的玩家，已经连续3次翻前弃牌。","ask":"轮到你，你怎么做？","opts":[{"tag":"FOLD","cls":"fold","txt":"弃牌。AJ在UTG没优势，等更好的牌。","scores":{"PRE":1,"PSY":3}},{"tag":"RAISE","cls":"raise","txt":"加注到$6（3BB），标准开牌范围。","scores":{"PRE":3,"PSY":3}},{"tag":"RAISE","cls":"raise","txt":"加注到$10（5BB），打紧玩家，多开几个底池。","scores":{"PRE":2,"PSY":2}},{"tag":"LIMP","cls":"call","txt":"跟注$2进底池，见机行事。","scores":{"PRE":1,"PSY":1}}]},{"id":"pre2","dim":"PRE","tag":"翻前 · BTN位","ctx":"6人桌，$2/$5现金局。你在BTN，手牌 <span class=\"cards\">7♣ 6♣</span>。CO（松凶型玩家，这局已经赢了三个底池）raise到$20，其他人folded。底池$27。你有$600，对手有$450。","ask":"你怎么应对？","opts":[{"tag":"FOLD","cls":"fold","txt":"弃牌。投机牌vs松凶，太危险了。","scores":{"PRE":2,"PSY":2}},{"tag":"CALL","cls":"call","txt":"跟注$20，在位优势+有隐含赔率。","scores":{"PRE":3,"PSY":3}},{"tag":"3BET","cls":"raise","txt":"3-bet到$65，代表强牌施压。","scores":{"PRE":3,"FLP":3,"PSY":2}},{"tag":"ALL-IN","cls":"allin","txt":"直接推all-in $450，看他敢不敢接。","scores":{"PRE":1,"PSY":1}}]},{"id":"pre3","dim":"PRE","tag":"翻前 · BB位","ctx":"锦标赛，200人，你现在是泡沫（bubble）前5人。你在BB，筹码$8000（16BB）。BTN是一个紧弱型玩家，raise all-in $8000。SB已弃牌。你的手牌是 <span class=\"cards\">Q♠ 9♣</span>。","ask":"你怎么做？","opts":[{"tag":"FOLD","cls":"fold","txt":"弃牌。Q9太弱，等泡沫过了再说。","scores":{"PRE":3,"PSY":3}},{"tag":"CALL","cls":"call","txt":"跟注。紧弱玩家push范围窄，Q9有机会。","scores":{"PRE":2,"PSY":2}},{"tag":"CALL","cls":"call","txt":"跟注。不管什么牌，反正要靠脸，叫！","scores":{"PRE":1,"PSY":1}},{"tag":"FOLD","cls":"fold","txt":"弃牌，但是嘴上骂他运气好。","scores":{"PRE":1,"PSY":1}}]},{"id":"pre4","dim":"PRE","tag":"翻前 · SB位","ctx":"$1/$2 线上9人桌。你在SB，手牌 <span class=\"cards\">K♦ K♥</span>。UTG加注到$8，MP跟注，CO跟注，BTN跟注。底池$33，轮到你。","ask":"四个人进了底池，你怎么打KK？","opts":[{"tag":"RAISE","cls":"raise","txt":"3-bet到$42，驱逐杂鱼，保护手牌。","scores":{"PRE":3,"PSY":3}},{"tag":"RAISE","cls":"raise","txt":"3-bet到$60，打大一点，反正KK超强。","scores":{"PRE":2,"PSY":2}},{"tag":"CALL","cls":"call","txt":"跟注，隐藏手牌慢玩，等翻牌再打。","scores":{"PRE":2,"FLP":1,"PSY":2}},{"tag":"ALL-IN","cls":"allin","txt":"直接all-in $200！KK就是要堆筹码！","scores":{"PRE":1,"PSY":2}}]},{"id":"pre5","dim":"PRE","tag":"翻前 · HJ位","ctx":"$5/$10 现金局，6人桌。你在HJ，手牌 <span class=\"cards\">A♦ K♣</span>。你左边的CO玩家刚刚输了一个大底池（对方连河打出同花），正在叹气刷手机，明显状态不佳。","ask":"你怎么打AKo？","opts":[{"tag":"RAISE","cls":"raise","txt":"正常加注到$30（3BB），标准操作。","scores":{"PRE":3,"READ":2}},{"tag":"RAISE","cls":"raise","txt":"加注到$40，针对性压迫情绪不稳的对手。","scores":{"PRE":3,"READ":3}},{"tag":"LIMP","cls":"call","txt":"Limp进来，等对方先动作。","scores":{"PRE":1,"READ":1}},{"tag":"FOLD","cls":"fold","txt":"AK是\"Anna Kournikova\"，看着好看赢不了，弃牌。","scores":{"PRE":1,"PSY":1}}]},{"id":"pre6","dim":"PRE","tag":"翻前 · BTN位","ctx":"锦标赛决赛桌，9人，你是筹码第二多的玩家。短码玩家（2BB）在UTG推all-in。轮转到你（BTN），手牌 <span class=\"cards\">5♦ 4♦</span>。有两个大码玩家在你后面还没行动。","ask":"你怎么处理？","opts":[{"tag":"FOLD","cls":"fold","txt":"弃牌。54s太弱，风险不值得。","scores":{"PRE":3,"PSY":3}},{"tag":"CALL","cls":"call","txt":"跟注。赔率够，有机会干掉短码。","scores":{"PRE":2,"PSY":2}},{"tag":"RAISE","cls":"raise","txt":"超额加注isolate，防止后手参与。","scores":{"PRE":3,"READ":3}},{"tag":"ALL-IN","cls":"allin","txt":"直接all-in，挤压后面的玩家全弃牌。","scores":{"PRE":2,"PSY":1}}]},{"id":"pre7","dim":"PRE","tag":"翻前 · 4-bet场景","ctx":"$2/$5 现金局，你在CO，手牌 <span class=\"cards\">A♠ Q♠</span>。BTN是一个紧实的玩家（VPIP约18%），你开牌到$15，BTN 3-bet到$45，其他人已弃牌。底池$52，轮到你。","ask":"面对紧玩家的3-bet，你怎么应对AQs？","opts":[{"tag":"FOLD","cls":"fold","txt":"弃牌。AQ面对紧玩家的3-bet是dominated的概率很高。","scores":{"PRE":3,"READ":3}},{"tag":"CALL","cls":"call","txt":"跟注，位置在后，看牌再说。","scores":{"PRE":2,"READ":2}},{"tag":"4BET","cls":"raise","txt":"4-bet到$120，代表AK/AA施压。","scores":{"PRE":2,"PSY":2}},{"tag":"ALL-IN","cls":"allin","txt":"4-bet all-in $500，我就是要赌一把！","scores":{"PRE":1,"PSY":1}}]},{"id":"pre8","dim":"PRE","tag":"翻前 · 小口袋对","ctx":"9人桌，$1/$2，你在MP，手牌 <span class=\"cards\">4♣ 4♦</span>。UTG（紧实型，从不虚诈）raise到$8。其他人fold到你。双方筹码均为$200。","ask":"面对紧实玩家的开牌，小对子怎么打？","opts":[{"tag":"FOLD","cls":"fold","txt":"弃牌。小对子面对紧玩家，很可能有大对子在等你。","scores":{"PRE":2,"PSY":2}},{"tag":"CALL","cls":"call","txt":"跟注$8，寻求set赔率（implied odds够）。","scores":{"PRE":3,"READ":2}},{"tag":"CALL","cls":"call","txt":"跟注，反正44已经赢了，等牌面就好。","scores":{"PRE":1,"PSY":1}},{"tag":"RAISE","cls":"raise","txt":"3-bet到$28，44完全可以3-bet为价值。","scores":{"PRE":1,"FLP":2}}]},{"id":"flp1","dim":"FLP","tag":"Flop · C-bet决策","ctx":"$2/$5，你在BTN，手牌 <span class=\"cards\">A♠ K♣</span>。翻前你raise到$15，BB跟注。翻牌 <span class=\"cards\">J♦ 7♥ 2♣</span>（彩虹）。BB check。底池$31，你有$480，对手$460。","ask":"你完全没打中，怎么办？","opts":[{"tag":"CHECK","cls":"check","txt":"Check back。没打中就不打，免得被反扑。","scores":{"FLP":2,"PSY":3}},{"tag":"BET","cls":"raise","txt":"bet $15（约1/2底池），标准continuation bet。","scores":{"FLP":3,"PSY":3}},{"tag":"BET","cls":"raise","txt":"bet $30（全底池），大注施压让他弃牌。","scores":{"FLP":2,"PSY":2}},{"tag":"BET","cls":"raise","txt":"bet $80，这么大的注他肯定弃！","scores":{"FLP":1,"PSY":1}}]},{"id":"flp2","dim":"FLP","tag":"Flop · 面对donk bet","ctx":"$1/$3，你在CO用 <span class=\"cards\">9♠ 9♦</span> 开牌到$12，BTN弃牌，BB（松凶型，刚刚叫了一个奇怪的底池）跟注。翻牌 <span class=\"cards\">K♦ 9♥ 3♣</span>。BB直接下注$25（bottom pair?还是慢玩K?）。底池$25，你有$400。","ask":"你中了set！BB先donk bet，你怎么应对？","opts":[{"tag":"CALL","cls":"call","txt":"跟注，慢玩set，等后街加大。","scores":{"FLP":2,"TRV":3}},{"tag":"RAISE","cls":"raise","txt":"raise到$75，value bet，开始堆筹码。","scores":{"FLP":3,"TRV":3}},{"tag":"RAISE","cls":"raise","txt":"raise到$200，直接对准他的全部筹码。","scores":{"FLP":3,"PSY":2}},{"tag":"FOLD","cls":"fold","txt":"也许他有K？谨慎弃牌。","scores":{"FLP":1,"PSY":1}}]},{"id":"flp3","dim":"FLP","tag":"Flop · 抽牌处理","ctx":"6人桌，$5/$10。你在BB，手牌 <span class=\"cards\">Q♦ T♦</span>。BTN raise到$30，你跟注。翻牌 <span class=\"cards\">J♦ 9♣ 2♦</span>，你有双面顺子+同花抽牌（大约15个outs！）。BTN c-bet $40。底池$65，你有$800。","ask":"面对c-bet，你有超强抽牌，怎么打？","opts":[{"tag":"CALL","cls":"call","txt":"跟注，被动抽牌，看turn再行动。","scores":{"FLP":2,"TRV":2}},{"tag":"RAISE","cls":"raise","txt":"raise to $120，半诈唬+保护抽牌。","scores":{"FLP":3,"TRV":3}},{"tag":"RAISE","cls":"raise","txt":"raise all-in $800，15个outs直接全下！","scores":{"FLP":2,"PSY":1}},{"tag":"FOLD","cls":"fold","txt":"没成牌就弃牌，不做梦了。","scores":{"FLP":1,"PSY":2}}]},{"id":"flp4","dim":"FLP","tag":"Flop · 读牌面纹理","ctx":"$2/$5，9人桌。你在HJ手牌 <span class=\"cards\">A♠ A♦</span>，3-bet到$45后只有SB跟注（该玩家人称\"橡皮筋\"，极少弃牌，靠运气win率颇高）。翻牌 <span class=\"cards\">K♣ Q♦ J♣</span>。SB check。底池$92。","ask":"AA面对KQJ翻牌面，你怎么应对？","opts":[{"tag":"CHECK","cls":"check","txt":"Check back，这个牌面AA很危险，控制底池。","scores":{"FLP":3,"READ":3}},{"tag":"BET","cls":"raise","txt":"小额bet $30，blocking bet试探他反应。","scores":{"FLP":3,"READ":3}},{"tag":"BET","cls":"raise","txt":"bet $70（3/4底池），继续价值下注。","scores":{"FLP":2,"READ":2}},{"tag":"BET","cls":"raise","txt":"bet全底池$92，AA就要发挥价值！","scores":{"FLP":1,"READ":1}}]},{"id":"flp5","dim":"FLP","tag":"Flop · 面对re-raise","ctx":"$1/$2线上桌。你在BTN手牌 <span class=\"cards\">J♣ T♣</span>，跟注到翻牌 <span class=\"cards\">9♦ 8♣ 2♠</span>，你有双面顺子抽牌。你c-bet $8，对手（第一次在这里见到，统计显示3-bet flop频率很低）raise到$28。底池$28，你有$180。","ask":"你面对一个raise，你的手牌实际上是强半诈唬，怎么办？","opts":[{"tag":"FOLD","cls":"fold","txt":"弃牌。没成牌，被raise只能走人。","scores":{"FLP":1,"PSY":2}},{"tag":"CALL","cls":"call","txt":"跟注$20，继续看牌，位置在后。","scores":{"FLP":3,"TRV":2}},{"tag":"RAISE","cls":"raise","txt":"3-bet all-in，半诈唬+顺子抽牌，最大化EV。","scores":{"FLP":3,"TRV":3}},{"tag":"RAISE","cls":"raise","txt":"加到$80，看他怎么反应再决定。","scores":{"FLP":2,"READ":2}}]},{"id":"flp6","dim":"FLP","tag":"Flop · 多人底池","ctx":"$1/$2，5人进入翻牌，你在SB手牌 <span class=\"cards\">5♥ 5♠</span>。翻牌 <span class=\"cards\">5♦ K♣ Q♥</span>，你中了set！轮到你先行动。底池$18（5人底池）。","ask":"多人底池中你中了暗三条，先行动怎么做？","opts":[{"tag":"CHECK","cls":"check","txt":"Check，慢玩set，让别人来bet。","scores":{"FLP":2,"TRV":3}},{"tag":"BET","cls":"raise","txt":"小额bet $8，引诱跟注，开始建底池。","scores":{"FLP":3,"TRV":3}},{"tag":"BET","cls":"raise","txt":"bet $18（底池额），清牌面，多人时保护set。","scores":{"FLP":3,"PSY":3}},{"tag":"BET","cls":"raise","txt":"bet $50，把所有人赶走然后赢$18。","scores":{"FLP":1,"PSY":1}}]},{"id":"flp7","dim":"FLP","tag":"Flop · OOP弃牌判断","ctx":"$5/$10，你在BB手牌 <span class=\"cards\">A♣ 7♣</span>，call了BTN的$30加注。翻牌 <span class=\"cards\">K♠ J♦ T♥</span>，你完全未中，且牌面对BTN的范围很有利。你check，BTN bet $50（底池$63）。","ask":"牌面不利，完全miss，怎么办？","opts":[{"tag":"FOLD","cls":"fold","txt":"弃牌。完全miss + 位置不利，这手牌结束了。","scores":{"FLP":3,"PSY":3}},{"tag":"CALL","cls":"call","txt":"跟注，Ace backdoor抽牌还有点价值。","scores":{"FLP":2,"TRV":2}},{"tag":"RAISE","cls":"raise","txt":"check-raise到$140，半诈唬！","scores":{"FLP":2,"PSY":2}},{"tag":"FOLD","cls":"fold","txt":"弃牌，然后打开手机查\"A7s翻牌策略\"。","scores":{"FLP":2,"PSY":1}}]},{"id":"trv1","dim":"TRV","tag":"Turn · 价值还是控制","ctx":"$2/$5，你在BTN手牌 <span class=\"cards\">K♥ Q♥</span>。翻牌 <span class=\"cards\">K♦ 7♣ 2♠</span> 你bet，被跟注。Turn <span class=\"cards\">J♠</span>。对手（松鱼型，喜欢跟注各种东西）check。底池$80，你有$380。","ask":"Turn出了J，你顶对顶踢脚，怎么打？","opts":[{"tag":"CHECK","cls":"check","txt":"Check back，J让牌面变复杂了，控制底池。","scores":{"TRV":3,"READ":3}},{"tag":"BET","cls":"raise","txt":"bet $40（1/2底池），继续价值下注。","scores":{"TRV":3,"READ":2}},{"tag":"BET","cls":"raise","txt":"bet $80（底池额），大价值，他跟注范围很广。","scores":{"TRV":2,"READ":2}},{"tag":"BET","cls":"raise","txt":"bet $200，反正他什么都跟，直接all-in附近。","scores":{"TRV":1,"PSY":1}}]},{"id":"trv2","dim":"TRV","tag":"Turn · 诈唬timing","ctx":"$1/$2，你在CO手牌 <span class=\"cards\">A♦ 4♦</span>。翻牌 <span class=\"cards\">Q♠ 8♣ 3♦</span> 你c-bet被跟注（对手是个紧实型，很少call无成牌）。Turn <span class=\"cards\">K♣</span>。对手check。底池$42，你有$160。","ask":"Turn出K，你仍然nothing，紧实型对手check，继续诈唬吗？","opts":[{"tag":"CHECK","cls":"check","txt":"Check back，不想扩大底池，看river怎么变。","scores":{"TRV":2,"PSY":3}},{"tag":"BET","cls":"raise","txt":"bet $28（2/3底池），代表AK/KK继续施压。","scores":{"TRV":3,"PSY":3}},{"tag":"BET","cls":"raise","txt":"bet $80，大注让紧玩家弃牌QQ以下。","scores":{"TRV":2,"PSY":2}},{"tag":"BET","cls":"raise","txt":"all-in $160，不诈唬到底不是真诈唬！","scores":{"TRV":1,"PSY":1}}]},{"id":"trv3","dim":"TRV","tag":"River · 终极决策","ctx":"$5/$10，你在SB手牌 <span class=\"cards\">A♠ Q♦</span>。牌面 <span class=\"cards\">A♥ 8♣ 3♦ 2♣ 7♠</span>（全五街看完）。你一直在bet，到河牌你bet $120，对手（读牌大师型，不轻易call也不轻易弃牌）raise all-in $480。底池$760，你需要call $360。","ask":"面对河牌raise，你的顶对顶踢脚，怎么做？","opts":[{"tag":"FOLD","cls":"fold","txt":"弃牌。河牌raise几乎都是强牌，A-Q难以打败。","scores":{"TRV":3,"READ":3}},{"tag":"CALL","cls":"call","txt":"跟注。赔率够，而且对手可能是诈唬。","scores":{"TRV":2,"READ":2}},{"tag":"CALL","cls":"call","txt":"跟注，反正我已经bet了这么多，弃牌不甘心。","scores":{"TRV":1,"PSY":1}},{"tag":"FOLD","cls":"fold","txt":"弃牌，但是先问一句\"你有什么？\"","scores":{"TRV":2,"PSY":2}}]},{"id":"trv4","dim":"TRV","tag":"River · 价值还是诈唬","ctx":"$2/$5，你在BTN手牌 <span class=\"cards\">7♦ 6♦</span>。全程抽同花+顺子未中，河牌 <span class=\"cards\">2♥</span> 砖头一块。牌面 <span class=\"cards\">K♠ J♦ 9♦ 4♣ 2♥</span>。对手（情绪型玩家，前20分钟输了大底池）check。底池$90，你有$250。","ask":"彻底没打中，对手先check，对手情绪不稳，你怎么办？","opts":[{"tag":"CHECK","cls":"check","txt":"Check，没牌就算了，收摊。","scores":{"TRV":2,"PSY":3}},{"tag":"BET","cls":"raise","txt":"bet $50，小额探针，看他反应。","scores":{"TRV":3,"READ":3}},{"tag":"BET","cls":"raise","txt":"bet $90（全底池），情绪型玩家更容易call，但也更容易弃牌。","scores":{"TRV":2,"PSY":2}},{"tag":"BET","cls":"raise","txt":"all-in $250！情绪玩家肯定弃牌！","scores":{"TRV":2,"PSY":1}}]},{"id":"trv5","dim":"TRV","tag":"Turn · 被check-raise","ctx":"$1/$2，你在BTN手牌 <span class=\"cards\">T♠ T♣</span>。翻牌 <span class=\"cards\">9♦ 4♥ 2♣</span>，你bet被call。Turn <span class=\"cards\">3♦</span>（底部顺子可能性低）。对手check-raise你到$80（你bet $25，他加到$80）。底池$50之前。你有$350。","ask":"Turn被check-raise，持超对，你怎么应对？","opts":[{"tag":"FOLD","cls":"fold","txt":"弃牌。Turn的check-raise太strong，TT让步。","scores":{"TRV":3,"READ":3}},{"tag":"CALL","cls":"call","txt":"跟注，继续看river，不扩大损失。","scores":{"TRV":2,"READ":2}},{"tag":"RAISE","cls":"raise","txt":"3-bet to $220，代表value还击！","scores":{"TRV":2,"PSY":2}},{"tag":"FOLD","cls":"fold","txt":"弃牌。你记住，下一手一定报仇。","scores":{"TRV":2,"PSY":1}}]},{"id":"trv6","dim":"TRV","tag":"River · 薄价值","ctx":"$2/$5，你在CO手牌 <span class=\"cards\">A♣ J♠</span>。牌面 <span class=\"cards\">A♦ 9♣ 6♦ 2♥ K♠</span>，没有明显听牌。你全程check-call，到河牌对手check。底池$60，你有$400。","ask":"你有顶对，到河牌对手check，你怎么做？","opts":[{"tag":"CHECK","cls":"check","txt":"Check，已经是最后一街，收好底池就行。","scores":{"TRV":2,"PSY":3}},{"tag":"BET","cls":"raise","txt":"薄价值bet $25，争取被更差的牌跟注。","scores":{"TRV":3,"READ":3}},{"tag":"BET","cls":"raise","txt":"bet $60（全底池），最大价值！","scores":{"TRV":2,"READ":2}},{"tag":"BET","cls":"raise","txt":"bet $200，别白白浪费这个底池。","scores":{"TRV":1,"PSY":1}}]},{"id":"trv7","dim":"TRV","tag":"River · 接近All-in决策","ctx":"锦标赛，最终桌8人。盲注$500/$1000。你有 <span class=\"cards\">Q♣ Q♦</span>，翻前3-bet被call，对手是筹码领先者（松凶，这局赢了好几个底池，正在飘）。全程三街bet后，对手在河牌面 <span class=\"cards\">K♦ J♦ 7♣ 2♠ 5♥</span> 突然下注$18000（相当于你全部筹码的90%）。","ask":"河牌被对手大额bet，QQ面对KJ7 25牌面，怎么做？","opts":[{"tag":"FOLD","cls":"fold","txt":"弃牌。QQ在这个牌面很脆弱。","scores":{"TRV":3,"READ":3}},{"tag":"CALL","cls":"call","txt":"跟注。松凶对手可能诈唬，赔率够。","scores":{"TRV":2,"READ":3}},{"tag":"CALL","cls":"call","txt":"跟注，反正输了也无所谓。","scores":{"TRV":1,"PSY":1}},{"tag":"FOLD","cls":"fold","txt":"弃牌，然后开始复盘分析自己哪里出了问题。","scores":{"TRV":3,"PSY":3}}]},{"id":"read1","dim":"READ","tag":"读人 · 身体语言","ctx":"$2/$5 线下俱乐部。你在HJ手牌 <span class=\"cards\">J♠ J♦</span>，开牌被BTN（第一次见面，40岁男性，西装笔挺）3-bet。在他下注时，你注意到他嘴角微微上扬，手指轻轻敲了一下桌子，然后保持静止。","ask":"根据这些tells，你怎么判断并行动？","opts":[{"tag":"CALL","cls":"call","txt":"跟注。这些动作不够可靠，仅参考位置和范围。","scores":{"READ":3,"PRE":2}},{"tag":"FOLD","cls":"fold","txt":"弃牌。他很自信，可能有大牌。","scores":{"READ":2,"PSY":2}},{"tag":"4BET","cls":"raise","txt":"4-bet，他显得太放松反而可能是诈唬。","scores":{"READ":2,"PSY":2}},{"tag":"CALL","cls":"call","txt":"跟注，然后全程盯着他眼睛，寻找更多信息。","scores":{"READ":3,"PSY":2}}]},{"id":"read2","dim":"READ","tag":"读人 · 下注模式","ctx":"在线9人桌，这个对手（HUD显示：VPIP 62，PFR 8）今天已经连续赢了三个底池，每次都是用相同的操作：翻前跟注，翻牌check，turn donk小额bet赢底池。你拿着 <span class=\"cards\">A♦ K♦</span>，他又一次turn donk到你，牌面 <span class=\"cards\">Q♠ J♥ 2♦ 7♣</span>。底池$45，他bet $15。","ask":"根据他的固定模式，你怎么应对？","opts":[{"tag":"FOLD","cls":"fold","txt":"弃牌。没打中就走。","scores":{"READ":1,"PRE":2}},{"tag":"CALL","cls":"call","txt":"跟注，看他到底是模式还是真有牌。","scores":{"READ":2,"TRV":2}},{"tag":"RAISE","cls":"raise","txt":"raise，打破他的节奏，他的donk bet可能是弱牌。","scores":{"READ":3,"TRV":3}},{"tag":"CALL","cls":"call","txt":"跟注，但内心默默记下他的模式。","scores":{"READ":3,"PSY":2}}]},{"id":"read3","dim":"READ","tag":"读人 · 情绪状态","ctx":"线下poker room，你的右手边坐着一位玩家（Lisa），她今晚输了三个大底池（每次都在river被击中），现在明显处于tilt状态——不断抱怨运气，每手牌都叫得很大。你手里是 <span class=\"cards\">8♠ 8♦</span>，Lisa在你前面raise all-in $120（她还有$80剩余）。","ask":"面对情绪失控玩家的push，你怎么处理？","opts":[{"tag":"FOLD","cls":"fold","txt":"弃牌。即使她tilt，all-in的范围也可能有强牌。","scores":{"READ":2,"PSY":3}},{"tag":"CALL","cls":"call","txt":"跟注！Tilt玩家push范围极宽，88胜率不错。","scores":{"READ":3,"PSY":3}},{"tag":"CALL","cls":"call","txt":"跟注，反正我今天也输了钱，赌一把。","scores":{"READ":1,"PSY":1}},{"tag":"RAISE","cls":"raise","txt":"再加注隔离，不让其他人加入。","scores":{"READ":3,"TRV":2}}]},{"id":"read4","dim":"READ","tag":"读人 · 下注size解读","ctx":"$1/$2，你在BTN手牌 <span class=\"cards\">T♦ T♠</span>。一个从未见过的玩家在UTG open $15（7.5BB，远超正常size），其他人都fold到你。该玩家整局很安静，从未bluff过，到目前为止赢的底池都是强牌。","ask":"如何解读他这个超大size的开牌？","opts":[{"tag":"CALL","cls":"call","txt":"跟注，位置在后，看翻牌再说。","scores":{"READ":2,"PRE":2}},{"tag":"FOLD","cls":"fold","txt":"弃牌。超大size通常代表他想保护强牌，TT可能被dominate。","scores":{"READ":3,"PRE":3}},{"tag":"3BET","cls":"raise","txt":"3-bet到$50，用TT发动攻势，看他怎么反应。","scores":{"READ":2,"PRE":2}},{"tag":"CALL","cls":"call","txt":"跟注，然后在任何A/K/Q牌面都放弃。","scores":{"READ":3,"FLP":2}}]},{"id":"psy1","dim":"PSY","tag":"心理 · 连续失利后","ctx":"你今天已经输了3个大底池，全部都是river被打爆（对手的运气好到离谱）。累计损失6个买入。现在手里是 <span class=\"cards\">A♥ A♠</span>，翻前被对手（刚才击败你的那个人）3-bet。","ask":"拿到AA，面对\"仇人\"的3-bet，你怎么打？","opts":[{"tag":"4BET","cls":"raise","txt":"冷静4-bet到合适的size，正常价值打法。","scores":{"PSY":3,"PRE":3}},{"tag":"CALL","cls":"call","txt":"跟注，慢玩，引诱他继续bluff。","scores":{"PSY":3,"PRE":2}},{"tag":"ALL-IN","cls":"allin","txt":"直接all-in！AA就要堆筹码，今天必须赢回来！","scores":{"PSY":1,"PRE":2}},{"tag":"4BET","cls":"raise","txt":"4-bet，但在心里骂他是运气鬼。","scores":{"PSY":2,"PRE":3}}]},{"id":"psy2","dim":"PSY","tag":"心理 · 大赢后的心态","ctx":"你今晚大赢，已经在盈利8个买入。刚刚赢了本局最大底池（对手在river用TPTK call了你的价值raise）。你状态极佳，感觉今晚什么牌都能赢。现在手里是 <span class=\"cards\">6♦ 4♦</span> 在UTG。","ask":"大赢后，拿到64s在UTG，你怎么打？","opts":[{"tag":"FOLD","cls":"fold","txt":"弃牌。大赢手感好，但64s在UTG还是太弱。","scores":{"PSY":3,"PRE":3}},{"tag":"LIMP","cls":"call","txt":"Limp进来，感觉今晚很顺，看看翻牌。","scores":{"PSY":2,"PRE":1}},{"tag":"RAISE","cls":"raise","txt":"开牌raise！状态好的时候就要多打主动！","scores":{"PSY":1,"PRE":1}},{"tag":"FOLD","cls":"fold","txt":"弃牌，但是感觉自己无所不能，随时可能改变主意。","scores":{"PSY":2,"PRE":2}}]},{"id":"psy3","dim":"PSY","tag":"心理 · 面对嘲讽","ctx":"线下牌桌，旁边有个玩家（Alex）在上一手牌中嘲笑你的打法（\"这都能call？\"）。这一手你拿着 <span class=\"cards\">K♦ K♠</span>，Alex在你前面开牌到$15。你知道这是一手标准的3-bet牌。","ask":"对手刚嘲讽过你，现在你有KK，怎么打？","opts":[{"tag":"3BET","cls":"raise","txt":"3-bet到$45，正常价值打法，与情绪无关。","scores":{"PSY":3,"PRE":3}},{"tag":"CALL","cls":"call","txt":"跟注，隐藏手牌，慢玩让他多下注。","scores":{"PSY":3,"PRE":2}},{"tag":"3BET","cls":"raise","txt":"3-bet到$80！让他知道谁才是真正的高手！","scores":{"PSY":1,"PRE":2}},{"tag":"ALL-IN","cls":"allin","txt":"直接all-in，KK打你这种嘴炮必须全下！","scores":{"PSY":1,"PRE":1}}]},{"id":"psy4","dim":"PSY","tag":"心理 · 长时间等牌后","ctx":"你已经坐在牌桌上2小时，拿到的最好手牌是QJo（已经fold了），大部分时间在发牌圈等待。终于等来 <span class=\"cards\">J♥ T♣</span>（in MP），前面有一个tight-aggressive玩家开牌到$12。","ask":"等了2小时终于有手还过得去的牌，你怎么打？","opts":[{"tag":"FOLD","cls":"fold","txt":"弃牌。JTo面对TAG玩家的开牌，赔率不够。","scores":{"PSY":3,"PRE":3}},{"tag":"CALL","cls":"call","txt":"跟注$12，用隐含赔率玩连接牌。","scores":{"PSY":2,"PRE":2}},{"tag":"RAISE","cls":"raise","txt":"3-bet，等了这么久，不能白等！","scores":{"PSY":1,"PRE":1}},{"tag":"CALL","cls":"call","txt":"跟注，但是心里想着\"这次一定要中\"。","scores":{"PSY":1,"PRE":2}}]}]</script>
-<script type="application/json" id="thti-t-data">[{"id":"FISH","name":"鱼儿","code":"FISH-y","emoji":"🐟","funny":"又名\"行走的提款机预备役\"。你打牌的方式让庄家想给你颁发\"最佳捐款人\"奖。恭喜你，每桌都欢迎你的到来——就像欢迎一个免费ATM。","desc":"你的牌桌风格充满随性，hand selection偏宽，常常追逐底牌，在没有胜算时拒绝放弃。也许你觉得牌局的乐趣在于参与，而不是计算期望值。有时候运气眷顾了你，但长期来看，牌桌会对你的账户表示感谢。","dims":{"PRE":2,"FLP":2,"TRV":2,"READ":2,"PSY":2}},{"id":"SHARK","name":"鲨鱼","code":"SHAR-K","emoji":"🦈","funny":"你大概是整桌人里唯一在用\"期望值\"思考问题的。其他人打牌靠感情，你打牌靠微积分。","desc":"强大的手牌选择和主动打法是你的标志。你在翻前就开始布局，翻后能根据牌面和对手信息做出精准决策。你既能value bet，也能合理bluff。如果说牌桌是战场，你大概是那个带了地图来的人。","dims":{"PRE":9,"FLP":8,"TRV":8,"READ":8,"PSY":9}},{"id":"CALLER","name":"跟注站","code":"CALL-er","emoji":"📞","funny":"\"fold？那不是弃牌，那是认输！\" 你的人生哲学是：只要跟注，就有机会。结果就是，牌桌给你的机会是连续亏损。","desc":"你极少主动发起攻势，更习惯跟注和check。你相信\"看到最后才知道谁赢\"，忽视了大量的implied odds计算和位置优势。牌桌上的人都爱你，因为你从不bluff，也从不fold。","dims":{"PRE":3,"FLP":3,"TRV":4,"READ":4,"PSY":5}},{"id":"BLUFFER","name":"诈唬王","code":"BLUFF-er","emoji":"🎭","funny":"\"我每次bluff都有道理的！\" 对的，就像皇帝每件新衣都有设计感一样。","desc":"你对诈唬有着不寻常的热情，甚至在不需要bluff的时候也会动用这个工具。你的bluff频率让对手困惑，有时候确实奏效，但long run的success rate……我们不提了。","dims":{"PRE":5,"FLP":6,"TRV":5,"READ":5,"PSY":5}},{"id":"NIT","name":"紧蛋","code":"NIT-y","emoji":"🥚","funny":"你上一次voluntarily进底池是什么时候？也许是上个月？你把牌桌当作冥想课，等到AA才动手。","desc":"你的手牌范围极窄，折叠率全桌最高。你的口号是\"宁可错过，不可错进\"。优点是你的赢率稳定，缺点是每小时期望值低到可以忽略不计，而且其他玩家已经知道当你加注时该怎么做了。","dims":{"PRE":7,"FLP":6,"TRV":6,"READ":6,"PSY":8}},{"id":"LOOSER","name":"松鱼","code":"LOOS-er","emoji":"🎣","funny":"你把Junk hands称为\"连接牌的潜力股\"。72o在你眼里也是suitable的——因为\"万一翻牌是77或22呢\"。","desc":"你进入的底池数量远超最优化值。对你来说，每张牌都有潜在价值，每个位置都适合参与。这种宽松风格偶尔能钓到大鱼，但大多数时候，你才是那条鱼。","dims":{"PRE":3,"FLP":3,"TRV":3,"READ":3,"PSY":4}},{"id":"SHOVER","name":"全下侠","code":"SHOVE-r","emoji":"💰","funny":"\"All-in是解决一切问题的答案。\" 你简化了整个决策树，砍掉了所有的中间节点，直接goto最终结果。效率极高，但结局……","desc":"你喜欢用筹码说话，而且一说就是全部。你的打法直接、霸气，减少了复杂的多街博弈，但也失去了大量EV。你在牌桌上像一把重锤，可惜很多时候螺丝钉比重锤更有用。","dims":{"PRE":5,"FLP":6,"TRV":5,"READ":4,"PSY":4}},{"id":"RIVERK","name":"河杀手","code":"RIVER-K","emoji":"🌊","funny":"你的得意传说总是：\"然后河牌出了一张……\"。你和river之间有一种奇妙的缘分，不管是你kill别人，还是river kill你。","desc":"你对river action情有独钟，无论是value bet、诈唬，还是接受命运的残酷。你在river card上花费的注意力超过任何一条街。你对后门牌和backdoor draws的执着让对手摸不着头脑。","dims":{"PRE":4,"FLP":4,"TRV":6,"READ":5,"PSY":4}},{"id":"LUCKY","name":"脸帝","code":"LUCK-y","emoji":"🍀","funny":"\"我不是运气好，是我感应到了宇宙的振动频率！\" 请问那个频率能不能分享一下坐标？","desc":"你深信自己与幸运女神有特殊联系。每次bad beat你归因于对手运气，每次赢牌你归因于自己的直觉。统计数据可能不同意，但你的快乐是真实的。而且谁说不行呢，有时候脸确实最重要。","dims":{"PRE":4,"FLP":4,"TRV":4,"READ":3,"PSY":3}},{"id":"TILTER","name":"上头者","code":"TILT-er","emoji":"🔥","funny":"\"我这不是tilt，这是战术愤怒！\" 对，就像火山不是爆发，而是进行地质表演一样。","desc":"你的情绪在牌桌上是公开透明的。输了一手牌后，你的加注频率显著上升，hand selection显著下降。你是对手最喜欢坐在旁边的那种玩家——因为情绪波动会让你做出不理性的决策。","dims":{"PRE":3,"FLP":3,"TRV":3,"READ":4,"PSY":2}},{"id":"COACHER","name":"复盘教练","code":"COACH-er","emoji":"📊","funny":"\"这手牌从EV的角度来说，你的check-call是一个严重的错误，正确的做法应该是……\" 牌桌是你的教室，其他人是你的学生，不管他们愿不愿意听。","desc":"你对牌理有较深的理解，且乐于分享（有时候是强迫分享）。你能分析自己和他人的错误，复盘能力强。但有时候过于理论化，在实战中反应慢，或者因为知道太多而在边缘情况里过度纠结。","dims":{"PRE":7,"FLP":6,"TRV":7,"READ":7,"PSY":6}},{"id":"GTOER","name":"GTO信徒","code":"GTO-er","emoji":"🤖","funny":"\"根据我的求解器，这里的最优混合策略是23%的raise，41%的call，36%的fold。\" 你在$1/$2的牌桌上解方程，就像在用卫星定位找厕所。","desc":"你研究过solver，知道balance和range的概念。你的打法经过理论验证，很少犯明显的错误。但你有时候忘记了对手并不是GTO bot，对一些明显的exploitative机会反应迟钝。","dims":{"PRE":8,"FLP":8,"TRV":7,"READ":7,"PSY":8}},{"id":"SLOWY","name":"慢玩怪","code":"SLOW-y","emoji":"🐌","funny":"\"我有AA，所以我要check。我有set，所以我要check。我有同花顺，所以我要……check。\" 你把慢玩用得比宽带提供商的网速还稳定。","desc":"你对慢玩（slowplay）有着近乎偏执的热爱。强牌check，超强牌check，nuts check——总是等到最后一秒才亮出底牌。虽然偶尔能赢大底池，但你也经常因为没有建立底池而在对手miss的情况下赢了很少。","dims":{"PRE":5,"FLP":4,"TRV":5,"READ":5,"PSY":6}},{"id":"BADB","name":"BB受害人","code":"BAD-B","emoji":"😭","funny":"\"我在BB永远是被欺负的那个！\" 统计数据显示BB确实是最难玩的位置，但你已经把它升华为了一种生活态度。","desc":"你特别在意自己在BB位置受到的不公平对待。每次被steal，每次在BB被raise，你都记在心里。你打牌时有些情绪驱动，尤其是在涉及自尊的场合。牌桌有时候是你的战场，有时候是你的心理治疗室。","dims":{"PRE":4,"FLP":4,"TRV":4,"READ":5,"PSY":3}},{"id":"TRAPER","name":"装死者","code":"TRAP-er","emoji":"🎪","funny":"\"我的check不是弱，是诱惑。\" 你最享受的时刻是对手大额下注后你缓缓翻牌，看着他的脸垮下来。","desc":"你对trap（陷阱）的运用炉火纯青。你喜欢用强牌check来引诱对手，然后在恰当的时机发动致命一击。你的打法神秘而有节制，对手很难判断你的强弱。","dims":{"PRE":6,"FLP":7,"TRV":8,"READ":7,"PSY":8}},{"id":"READER","name":"读牌大师","code":"READ-er","emoji":"🔮","funny":"\"我就知道他有K！他下注的方式，他的呼吸频率，他握筹码时小拇指弯曲的角度……\" 你是牌桌上的侦探，但有时候福尔摩斯也会推理错误。","desc":"你对对手行为模式的分析令人印象深刻。你会注意到下注size、timing、身体语言的细节，并形成完整的判断。你的read常常准确，有时候能做出看似不可思议的call或fold。","dims":{"PRE":6,"FLP":7,"TRV":7,"READ":9,"PSY":7}},{"id":"RAILER","name":"围观者","code":"RAIL-er","emoji":"🧐","funny":"\"我不是不想打，我只是在观察学习。\" 你已经观察学习了六个月了，你身边的朋友已经打了一千手牌。","desc":"你比较少参与底池，更喜欢在旁边观察。你积累了大量理论知识，对别人的打法如数家珍，但真正轮到自己出手时，总有各种理由保守行事。有时候你需要的不是更多知识，而是更多胆量。","dims":{"PRE":5,"FLP":5,"TRV":5,"READ":8,"PSY":7}},{"id":"ATM","name":"提款机","code":"ATM-2.0","emoji":"🏧","funny":"你是牌桌上最受欢迎的设施。按键流畅，出钱及时，从不报障碍。只是使用者必须持有德州扑克卡才能提取。","desc":"你在松鱼的基础上加了被动和不理智。你会用各种理由call底池，然后在被打爆后觉得对手运气太好。你的lose rate稳定而优雅，为整桌的胜者提供了稳定的EV来源。","dims":{"PRE":2,"FLP":2,"TRV":2,"READ":2,"PSY":2}}]</script>
-<script>
-(function(){
-  var _qs=[], _cur=0, _ans={};
-  
-  function shuffle(a){
-    for(var i=a.length-1;i>0;i--){
-      var j=Math.floor(Math.random()*(i+1));
-      var t=a[i];a[i]=a[j];a[j]=t;
-    }
-    return a;
+/* Friend callout */
+.friend-callout{background:rgba(212,160,23,.06);border:1px solid rgba(212,160,23,.2);border-radius:10px;padding:14px 18px;margin-bottom:14px;font-size:.85rem;color:#d4c080;line-height:1.8}
+.result-funny{background:rgba(255,255,255,.03);border:1px solid rgba(212,160,23,.15);border-radius:10px;padding:16px 20px;margin-bottom:14px;font-size:.88rem;color:#d4c080;line-height:1.8;font-style:italic}
+.result-desc{font-size:.88rem;color:#c8b87a;line-height:1.9;margin-bottom:20px;padding:0 4px}
+.btn-retry{background:rgba(255,255,255,.05);border:1px solid rgba(212,160,23,.3);color:#d4a017;padding:12px 32px;font-size:.9rem;border-radius:4px;cursor:pointer;letter-spacing:2px;transition:all .3s;width:100%;margin-bottom:10px}
+.btn-retry:hover{background:rgba(212,160,23,.1);border-color:#d4a017}
+.result-footer{text-align:center;font-size:.72rem;color:#5a4a2a;line-height:1.8;margin-top:16px}
+
+/* Share score highlight */
+.share-score{background:linear-gradient(135deg,rgba(212,160,23,.12),rgba(192,57,43,.08));border:1px solid rgba(212,160,23,.3);border-radius:12px;padding:16px;text-align:center;margin-bottom:16px}
+.share-score-label{font-size:.75rem;color:#b8942e;letter-spacing:2px;margin-bottom:6px}
+.share-score-number{font-size:3.2rem;font-weight:bold;color:#d4a017;line-height:1;margin-bottom:4px}
+.share-score-sub{font-size:.8rem;color:#c8b87a}</style></head><body><div id="svg-store" style="display:none"><div id="svgt-SURGEON"><svg viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg"> <polygon points="100,20 130,50 120,80 100,70 80,80 70,50" fill="#7b5ea7"></polygon> <polygon points="80,55 70,50 65,75 80,80" fill="#6a4e96"></polygon> <polygon points="120,55 130,50 135,75 120,80" fill="#6a4e96"></polygon> <circle cx="100" cy="48" r="22" fill="#f0c8a0"></circle> <polygon points="85,38 95,32 105,32 115,38 115,55 85,55" fill="#e8b890"></polygon> <polygon points="88,42 96,40 104,40 112,42" fill="#c49060"></polygon> <ellipse cx="93" cy="47" rx="4" ry="5" fill="#2a1a0a"></ellipse> <ellipse cx="107" cy="47" rx="4" ry="5" fill="#2a1a0a"></ellipse> <polygon points="95,52 100,55 105,52 100,54" fill="#c07060"></polygon> <polygon points="70,80 80,80 85,140 75,145 60,130 65,100" fill="#f5f5f5"></polygon> <polygon points="130,80 120,80 115,140 125,145 140,130 135,100" fill="#e8e8e8"></polygon> <polygon points="80,80 120,80 125,145 100,150 75,145" fill="#f0f0f0"></polygon> <polygon points="85,140 75,145 70,200 90,205 95,150" fill="#2a3a6a"></polygon> <polygon points="115,140 125,145 130,200 110,205 105,150" fill="#243060"></polygon> <polygon points="60,130 70,200 75,200 65,130" fill="#f0f0f0"></polygon> <polygon points="140,130 130,200 125,200 135,130" fill="#e8e8e8"></polygon> <rect x="88" y="95" width="24" height="3" rx="1" fill="#e74c3c"></rect> <rect x="98" y="85" width="3" height="24" rx="1" fill="#e74c3c"></rect> </svg></div><div id="svgt-MACHINE"><svg viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg"> <polygon points="75,25 125,25 135,55 125,75 75,75 65,55" fill="#4a6080"></polygon> <polygon points="80,30 120,30 128,50 80,50" fill="#3a5070"></polygon> <rect x="82" y="38" width="16" height="12" rx="2" fill="#00d4ff" opacity=".9"></rect> <rect x="102" y="38" width="16" height="12" rx="2" fill="#00d4ff" opacity=".9"></rect> <rect x="88" y="55" width="24" height="4" rx="2" fill="#60a0c0"></rect> <polygon points="65,55 50,60 48,80 65,75" fill="#3a5070"></polygon> <polygon points="135,55 150,60 152,80 135,75" fill="#3a5070"></polygon> <polygon points="65,75 135,75 140,150 100,160 60,150" fill="#4a6080"></polygon> <polygon points="75,75 85,75 80,150 70,145" fill="#3a5070"></polygon> <polygon points="125,75 115,75 120,150 130,145" fill="#3a5070"></polygon> <polygon points="80,150 70,145 65,210 85,215 90,155" fill="#2a4060"></polygon> <polygon points="120,150 130,145 135,210 115,215 110,155" fill="#243850"></polygon> <polygon points="48,80 35,210 50,212 65,150 65,80" fill="#4a6080"></polygon> <polygon points="152,80 165,210 150,212 135,150 135,80" fill="#3a5070"></polygon> <circle cx="100" cy="120" r="12" fill="#00d4ff" opacity=".4"></circle> <circle cx="100" cy="120" r="6" fill="#00d4ff"></circle> <rect x="82" y="135" width="36" height="3" rx="1" fill="#60a0c0"></rect> </svg></div><div id="svgt-TRAPPER"><svg viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg"> <polygon points="100,10 135,35 130,70 100,80 70,70 65,35" fill="#1a1a2e"></polygon> <circle cx="100" cy="45" r="24" fill="#c8a07a"></circle> <polygon points="76,35 100,25 124,35 120,55 80,55" fill="#b89068"></polygon> <polygon points="88,44 94,42 94,52 88,52" fill="#1a0a00"></polygon> <polygon points="106,44 112,42 112,52 106,52" fill="#1a0a00"></polygon> <polygon points="94,56 100,60 106,56" fill="#a06050"></polygon> <polygon points="65,70 70,70 55,210 40,205 45,120" fill="#0d0d1a"></polygon> <polygon points="135,70 130,70 145,210 160,205 155,120" fill="#0d0d1a"></polygon> <polygon points="70,70 130,70 138,160 100,175 62,160" fill="#16162a"></polygon> <polygon points="75,160 62,160 50,210 80,215 82,165" fill="#0d0d1a"></polygon> <polygon points="125,160 138,160 150,210 120,215 118,165" fill="#0a0a16"></polygon> <polygon points="60,90 40,205 55,210 70,120 70,90" fill="#12122a"></polygon> <polygon points="140,90 160,205 145,210 130,120 130,90" fill="#0e0e20"></polygon> <circle cx="88" cy="48" r="3" fill="#e056fd" opacity=".8"></circle> <circle cx="112" cy="48" r="3" fill="#e056fd" opacity=".8"></circle> <polygon points="100,30 85,25 100,18 115,25" fill="#2a1a3a"></polygon> </svg></div><div id="svgt-READER"><svg viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg"> <circle cx="100" cy="46" r="26" fill="#d4a87a"></circle> <polygon points="78,36 100,26 122,36 118,58 82,58" fill="#c09068"></polygon> <ellipse cx="91" cy="47" rx="5" ry="6" fill="#1a0a00"></ellipse> <ellipse cx="109" cy="47" rx="5" ry="6" fill="#1a0a00"></ellipse> <circle cx="91" cy="45" r="2" fill="#fff" opacity=".6"></circle> <circle cx="109" cy="45" r="2" fill="#fff" opacity=".6"></circle> <polygon points="88,57 100,62 112,57 100,60" fill="#a06850"></polygon> <polygon points="78,35 66,38 62,48 74,45" fill="#c09068"></polygon> <polygon points="122,35 134,38 138,48 126,45" fill="#c09068"></polygon> <polygon points="85,28 115,28 118,22 100,18 82,22" fill="#2a1a0a"></polygon> <polygon points="68,58 72,58 58,140 52,130 56,90" fill="#6a4a8a"></polygon> <polygon points="132,58 128,58 142,140 148,130 144,90" fill="#5a3a7a"></polygon> <polygon points="72,58 128,58 132,148 100,158 68,148" fill="#7a5aa0"></polygon> <polygon points="68,148 58,140 44,210 72,215 75,152" fill="#6a4a8a"></polygon> <polygon points="132,148 142,140 156,210 128,215 125,152" fill="#5a3a7a"></polygon> <polygon points="52,130 44,210 58,210 66,148 56,130" fill="#7a5aa0"></polygon> <polygon points="148,130 156,210 142,210 134,148 144,130" fill="#6a4a8a"></polygon> <circle cx="100" cy="100" r="8" fill="#e056fd" opacity=".3"></circle> <circle cx="100" cy="100" r="4" fill="#e056fd" opacity=".6"></circle> </svg></div><div id="svgt-SNIPER"><svg viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg"> <circle cx="100" cy="44" r="24" fill="#c8a070"></circle> <polygon points="80,32 100,22 120,32 116,54 84,54" fill="#b89060"></polygon> <polygon points="80,30 68,28 64,20 78,22" fill="#1a1a0a"></polygon> <polygon points="120,30 132,28 136,20 122,22" fill="#1a1a0a"></polygon> <polygon points="68,28 132,28 128,20 100,16 72,20" fill="#222210"></polygon> <ellipse cx="91" cy="44" rx="4" ry="5" fill="#0a0800"></ellipse> <ellipse cx="109" cy="44" rx="4" ry="5" fill="#0a0800"></ellipse> <polygon points="94,52 100,56 106,52" fill="#a07060"></polygon> <polygon points="68,54 74,54 60,150 50,140 54,90" fill="#3a4a2a"></polygon> <polygon points="132,54 126,54 140,150 150,140 146,90" fill="#2a3a1a"></polygon> <polygon points="74,54 126,54 130,148 100,158 70,148" fill="#4a5a3a"></polygon> <polygon points="70,148 60,150 46,215 76,218 78,152" fill="#3a4a2a"></polygon> <polygon points="130,148 140,150 154,215 124,218 122,152" fill="#2a3a1a"></polygon> <polygon points="50,140 46,215 60,215 64,148 52,138" fill="#4a5a3a"></polygon> <polygon points="150,140 154,215 140,215 136,148 148,138" fill="#3a4a2a"></polygon> <rect x="130" y="90" width="30" height="6" rx="2" fill="#1a1a0a"></rect> <rect x="130" y="93" width="30" height="2" rx="1" fill="#60a020" opacity=".6"></rect> </svg></div><div id="svgt-BULLY"><svg viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg"> <circle cx="100" cy="42" r="26" fill="#d4a070"></circle> <polygon points="78,28 100,18 122,28 120,56 80,56" fill="#c09060"></polygon> <polygon points="78,26 60,20 55,35 70,38" fill="#c09060"></polygon> <polygon points="122,26 140,20 145,35 130,38" fill="#c09060"></polygon> <ellipse cx="91" cy="42" rx="5" ry="5" fill="#0a0800"></ellipse> <ellipse cx="109" cy="42" rx="5" ry="5" fill="#0a0800"></ellipse> <polygon points="92,50 100,55 108,50 100,53" fill="#b07060"></polygon> <polygon points="95,35 105,35 105,30 95,30" fill="#b89060"></polygon> <polygon points="60,56 68,56 50,140 35,130 40,80" fill="#8b2020"></polygon> <polygon points="140,56 132,56 150,140 165,130 160,80" fill="#7a1818"></polygon> <polygon points="68,56 132,56 138,150 100,165 62,150" fill="#a02828"></polygon> <polygon points="62,150 50,140 32,218 68,222 72,155" fill="#8b2020"></polygon> <polygon points="138,150 150,140 168,218 132,222 128,155" fill="#7a1818"></polygon> <polygon points="35,130 32,218 50,218 56,148 37,128" fill="#a02828"></polygon> <polygon points="165,130 168,218 150,218 144,148 163,128" fill="#8b2020"></polygon> </svg></div><div id="svgt-SHOVER"><svg viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg"> <circle cx="100" cy="40" r="28" fill="#d4904a"></circle> <polygon points="76,26 100,14 124,26 122,58 78,58" fill="#c08040"></polygon> <ellipse cx="90" cy="40" rx="6" ry="6" fill="#0a0600"></ellipse> <ellipse cx="110" cy="40" rx="6" ry="6" fill="#0a0600"></ellipse> <polygon points="92,52 100,58 108,52 100,56" fill="#a06040"></polygon> <polygon points="78,26 58,18 50,36 68,40" fill="#d4904a"></polygon> <polygon points="122,26 142,18 150,36 132,40" fill="#c08040"></polygon> <polygon points="58,58 68,58 45,150 28,135 35,85" fill="#6a3010"></polygon> <polygon points="142,58 132,58 155,150 172,135 165,85" fill="#5a2808"></polygon> <polygon points="68,58 132,58 142,158 100,170 58,158" fill="#7a3a14"></polygon> <polygon points="58,158 45,150 25,222 65,226 70,163" fill="#6a3010"></polygon> <polygon points="142,158 155,150 175,222 135,226 130,163" fill="#5a2808"></polygon> <polygon points="28,135 25,222 45,222 52,155 30,133" fill="#7a3a14"></polygon> <polygon points="172,135 175,222 155,222 148,155 170,133" fill="#6a3010"></polygon> <polygon points="88,80 112,80 118,96 100,100 82,96" fill="#e0a050" opacity=".4"></polygon> </svg></div><div id="svgt-BLUFFER"><svg viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg"> <circle cx="100" cy="44" r="24" fill="#d4a878"></circle> <polygon points="80,30 100,22 120,30 116,56 84,56" fill="#c09868"></polygon> <ellipse cx="91" cy="44" rx="4" ry="5" fill="#0a0600"></ellipse> <ellipse cx="109" cy="44" rx="4" ry="5" fill="#0a0600"></ellipse> <circle cx="91" cy="42" r="1.5" fill="#fff" opacity=".7"></circle> <circle cx="109" cy="42" r="1.5" fill="#fff" opacity=".7"></circle> <polygon points="93,53 100,58 107,53 100,56" fill="#b07860"></polygon> <polygon points="84,30 116,30 118,24 100,18 82,24" fill="#3a2210"></polygon> <polygon points="68,56 74,56 58,145 46,132 52,88" fill="#c0392b"></polygon> <polygon points="132,56 126,56 142,145 154,132 148,88" fill="#a83222"></polygon> <polygon points="74,56 126,56 132,148 100,160 68,148" fill="#e0402e"></polygon> <polygon points="68,148 58,145 42,215 74,219 77,153" fill="#c0392b"></polygon> <polygon points="132,148 142,145 158,215 126,219 123,153" fill="#a83222"></polygon> <polygon points="46,132 42,215 58,215 62,148 48,130" fill="#e0402e"></polygon> <polygon points="154,132 158,215 142,215 138,148 152,130" fill="#c0392b"></polygon> <polygon points="94,70 106,70 110,84 100,88 90,84" fill="#f0a030" opacity=".7"></polygon> </svg></div><div id="svgt-CALLER"><svg viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg"> <circle cx="100" cy="48" r="26" fill="#c8a87a"></circle> <polygon points="78,36 100,24 122,36 118,60 82,60" fill="#b89870"></polygon> <ellipse cx="92" cy="48" rx="4" ry="5" fill="#1a0a00"></ellipse> <ellipse cx="108" cy="48" rx="4" ry="5" fill="#1a0a00"></ellipse> <polygon points="90,58 100,63 110,58" fill="#a07860"></polygon> <polygon points="100,24 94,16 106,16" fill="#3a2a1a"></polygon> <polygon points="72,60 78,60 62,160 48,148 54,98" fill="#4a6a8a"></polygon> <polygon points="128,60 122,60 138,160 152,148 146,98" fill="#3a5a7a"></polygon> <polygon points="78,60 122,60 128,158 100,170 72,158" fill="#5a7a9a"></polygon> <polygon points="72,158 62,160 46,220 78,223 81,163" fill="#4a6a8a"></polygon> <polygon points="128,158 138,160 154,220 122,223 119,163" fill="#3a5a7a"></polygon> <polygon points="48,148 46,220 62,220 66,158 50,146" fill="#5a7a9a"></polygon> <polygon points="152,148 154,220 138,220 134,158 150,146" fill="#4a6a8a"></polygon> <polygon points="85,100 115,100 118,116 100,122 82,116" fill="#6a8aaa" opacity=".4"></polygon> </svg></div><div id="svgt-FISH"><svg viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg"> <circle cx="100" cy="48" r="28" fill="#d4b888"></circle> <polygon points="76,34 100,22 124,34 120,62 80,62" fill="#c4a878"></polygon> <ellipse cx="91" cy="48" rx="6" ry="7" fill="#1a0a00"></ellipse> <ellipse cx="109" cy="48" rx="6" ry="7" fill="#1a0a00"></ellipse> <circle cx="91" cy="45" r="2.5" fill="#fff" opacity=".8"></circle> <circle cx="109" cy="45" r="2.5" fill="#fff" opacity=".8"></circle> <polygon points="90,60 100,66 110,60" fill="#b08870"></polygon> <polygon points="82,34 100,22 118,34 114,28 100,18 86,28" fill="#3a2810"></polygon> <polygon points="70,62 76,62 58,165 42,152 48,100" fill="#2ecc71"></polygon> <polygon points="130,62 124,62 142,165 158,152 152,100" fill="#27ae60"></polygon> <polygon points="76,62 124,62 130,162 100,175 70,162" fill="#3ad47a"></polygon> <polygon points="70,162 58,165 40,222 76,226 79,167" fill="#2ecc71"></polygon> <polygon points="130,162 142,165 160,222 124,226 121,167" fill="#27ae60"></polygon> <polygon points="42,152 40,222 58,222 62,165 44,150" fill="#3ad47a"></polygon> <polygon points="158,152 160,222 142,222 138,165 156,150" fill="#2ecc71"></polygon> </svg></div><div id="svgt-TILTER"><svg viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg"> <circle cx="100" cy="44" r="26" fill="#e08060"></circle> <polygon points="78,30 100,18 122,30 118,58 82,58" fill="#d07050"></polygon> <polygon points="82,32 92,28 98,34" fill="#1a0a00"></polygon> <polygon points="118,32 108,28 102,34" fill="#1a0a00"></polygon> <ellipse cx="91" cy="44" rx="5" ry="5" fill="#0a0000"></ellipse> <ellipse cx="109" cy="44" rx="5" ry="5" fill="#0a0000"></ellipse> <polygon points="90,54 100,58 110,54 100,56" fill="#b05040"></polygon> <polygon points="95,56 100,62 105,56" fill="#e07060"></polygon> <polygon points="68,58 74,58 56,155 40,140 46,90" fill="#c0392b"></polygon> <polygon points="132,58 126,58 144,155 160,140 154,90" fill="#a83222"></polygon> <polygon points="74,58 126,58 132,158 100,168 68,158" fill="#e04030"></polygon> <polygon points="68,158 56,155 38,220 72,224 75,163" fill="#c0392b"></polygon> <polygon points="132,158 144,155 162,220 128,224 125,163" fill="#a83222"></polygon> <polygon points="40,140 38,220 56,220 60,155 42,138" fill="#e04030"></polygon> <polygon points="160,140 162,220 144,220 140,155 158,138" fill="#c0392b"></polygon> <polygon points="78,28 66,20 68,30" fill="#ff6040" opacity=".8"></polygon> <polygon points="122,28 134,20 132,30" fill="#ff6040" opacity=".8"></polygon> </svg></div><div id="svgt-LUCKY"><svg viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg"> <circle cx="100" cy="44" r="26" fill="#d4b86a"></circle> <polygon points="78,30 100,18 122,30 118,58 82,58" fill="#c4a85a"></polygon> <ellipse cx="91" cy="44" rx="5" ry="6" fill="#0a0800"></ellipse> <ellipse cx="109" cy="44" rx="5" ry="6" fill="#0a0800"></ellipse> <polygon points="87,54 100,60 113,54 100,58" fill="#b09050"></polygon> <polygon points="100,18 88,10 112,10" fill="#f0c030"></polygon> <polygon points="90,12 100,4 110,12" fill="#e0b020"></polygon> <polygon points="68,58 74,58 56,155 40,140 46,90" fill="#f0c030"></polygon> <polygon points="132,58 126,58 144,155 160,140 154,90" fill="#e0b020"></polygon> <polygon points="74,58 126,58 132,158 100,168 68,158" fill="#f8d040"></polygon> <polygon points="68,158 56,155 38,220 72,224 75,163" fill="#f0c030"></polygon> <polygon points="132,158 144,155 162,220 128,224 125,163" fill="#e0b020"></polygon> <polygon points="40,140 38,220 56,220 60,155 42,138" fill="#f8d040"></polygon> <polygon points="160,140 162,220 144,220 140,155 158,138" fill="#f0c030"></polygon> <text x="100" y="90" text-anchor="middle" font-size="16" fill="#f0c030">🍀</text> </svg></div><div id="svgt-NIT"><svg viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg"> <circle cx="100" cy="44" r="24" fill="#c8a07a"></circle> <polygon points="80,30 100,20 120,30 116,56 84,56" fill="#b89070"></polygon> <ellipse cx="91" cy="44" rx="4" ry="5" fill="#1a0a00"></ellipse> <ellipse cx="109" cy="44" rx="4" ry="5" fill="#1a0a00"></ellipse> <polygon points="90,54 100,58 110,54" fill="#907060"></polygon> <polygon points="80,28 92,24 100,20 108,24 120,28 116,22 100,14 84,22" fill="#1a1a1a"></polygon> <polygon points="70,56 76,56 62,155 48,142 54,92" fill="#2a3a5a"></polygon> <polygon points="130,56 124,56 138,155 152,142 146,92" fill="#22304a"></polygon> <polygon points="76,56 124,56 130,153 100,163 70,153" fill="#324060"></polygon> <polygon points="70,153 62,155 46,218 76,221 79,158" fill="#2a3a5a"></polygon> <polygon points="130,153 138,155 154,218 124,221 121,158" fill="#22304a"></polygon> <polygon points="48,142 46,218 62,218 66,153 50,140" fill="#324060"></polygon> <polygon points="152,142 154,218 138,218 134,153 150,140" fill="#2a3a5a"></polygon> <rect x="90" y="84" width="20" height="28" rx="2" fill="#f5f0e0"></rect> <rect x="93" y="88" width="14" height="2" rx="1" fill="#aaa"></rect> <rect x="93" y="93" width="14" height="2" rx="1" fill="#aaa"></rect> <rect x="93" y="98" width="10" height="2" rx="1" fill="#aaa"></rect> </svg></div><div id="svgt-COACHER"><svg viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg"> <circle cx="100" cy="44" r="24" fill="#c8a87a"></circle> <polygon points="80,30 100,20 120,30 116,56 84,56" fill="#b89870"></polygon> <polygon points="80,30 65,28 62,38 76,40" fill="#c8a87a"></polygon> <polygon points="120,30 135,28 138,38 124,40" fill="#c8a87a"></polygon> <ellipse cx="91" cy="44" rx="4" ry="5" fill="#1a0800"></ellipse> <ellipse cx="109" cy="44" rx="4" ry="5" fill="#1a0800"></ellipse> <polygon points="90,54 100,58 110,54" fill="#907860"></polygon> <rect x="85" y="44" width="12" height="8" rx="2" fill="none" stroke="#4a4a6a" stroke-width="1.5"></rect> <rect x="103" y="44" width="12" height="8" rx="2" fill="none" stroke="#4a4a6a" stroke-width="1.5"></rect> <rect x="96" y="48" width="8" height="2" fill="#4a4a6a"></rect> <polygon points="80,28 120,28 118,20 100,14 82,20" fill="#5a4a3a"></polygon> <polygon points="68,56 74,56 58,150 44,138 50,90" fill="#4a5a3a"></polygon> <polygon points="132,56 126,56 142,150 156,138 150,90" fill="#3a4a2a"></polygon> <polygon points="74,56 126,56 132,150 100,162 68,150" fill="#5a6a4a"></polygon> <polygon points="68,150 58,150 42,215 74,218 77,155" fill="#4a5a3a"></polygon> <polygon points="132,150 142,150 158,215 126,218 123,155" fill="#3a4a2a"></polygon> <polygon points="44,138 42,215 58,215 62,150 46,136" fill="#5a6a4a"></polygon> <polygon points="156,138 158,215 142,215 138,150 154,136" fill="#4a5a3a"></polygon> <line x1="142" y1="100" x2="168" y2="88" stroke="#d4a017" stroke-width="3"></line> <polygon points="142,96 142,104 152,100" fill="#d4a017"></polygon> </svg></div><div id="svgt-BADB"><svg viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg"> <circle cx="100" cy="50" r="26" fill="#c8a07a"></circle> <polygon points="78,36 100,24 122,36 118,62 82,62" fill="#b89070"></polygon> <polygon points="85,42 95,40 91,48" fill="#1a0a00"></polygon> <polygon points="115,42 105,40 109,48" fill="#1a0a00"></polygon> <polygon points="90,58 100,62 110,58 100,60" fill="#a07860"></polygon> <polygon points="85,38 95,36 93,42 83,42" fill="#1a0a00"></polygon> <polygon points="115,38 105,36 107,42 117,42" fill="#1a0a00"></polygon> <polygon points="72,62 78,62 60,158 44,144 50,95" fill="#6a7a4a"></polygon> <polygon points="128,62 122,62 140,158 156,144 150,95" fill="#5a6a3a"></polygon> <polygon points="78,62 122,62 128,158 100,168 72,158" fill="#7a8a5a"></polygon> <polygon points="72,158 60,158 44,220 76,223 79,163" fill="#6a7a4a"></polygon> <polygon points="128,158 140,158 156,220 124,223 121,163" fill="#5a6a3a"></polygon> <polygon points="44,144 44,220 60,220 64,158 46,142" fill="#7a8a5a"></polygon> <polygon points="156,144 156,220 140,220 136,158 154,142" fill="#6a7a4a"></polygon> <line x1="88" y1="74" x2="96" y2="68" stroke="#6a7a4a" stroke-width="1.5"></line> <line x1="112" y1="74" x2="104" y2="68" stroke="#5a6a3a" stroke-width="1.5"></line> </svg></div><div id="svgt-SHOWOFF"><svg viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg"> <circle cx="100" cy="44" r="24" fill="#d4a070"></circle> <polygon points="80,30 100,18 120,30 116,56 84,56" fill="#c49060"></polygon> <ellipse cx="91" cy="44" rx="4" ry="5" fill="#0a0600"></ellipse> <ellipse cx="109" cy="44" rx="4" ry="5" fill="#0a0600"></ellipse> <polygon points="88,54 100,60 112,54 100,57" fill="#b07050"></polygon> <polygon points="100,16 88,8 100,4 112,8" fill="#f0c030"></polygon> <polygon points="96,10 100,2 104,10" fill="#e0b020"></polygon> <polygon points="68,56 74,56 52,150 36,135 42,86" fill="#e056fd"></polygon> <polygon points="132,56 126,56 148,150 164,135 158,86" fill="#c040e0"></polygon> <polygon points="74,56 126,56 132,150 100,162 68,150" fill="#f060ff"></polygon> <polygon points="68,150 52,150 34,218 72,222 75,155" fill="#e056fd"></polygon> <polygon points="132,150 148,150 166,218 128,222 125,155" fill="#c040e0"></polygon> <polygon points="36,135 34,218 52,218 56,150 38,133" fill="#f060ff"></polygon> <polygon points="164,135 166,218 148,218 144,150 162,133" fill="#e056fd"></polygon> <polygon points="36,90 52,86 48,100 32,104" fill="#f060ff" opacity=".6"></polygon> <polygon points="164,90 148,86 152,100 168,104" fill="#e056fd" opacity=".6"></polygon> </svg></div></div><div id="screen-home"><div class="home-suits">&#9824; &#9829; &#9830; &#9827;</div><div class="home-title">T H T I</div><div class="home-sub">Texas Hold'em Type Indicator</div><div class="home-tagline">你在牌桌上是什么人？<br>是冷静的手术刀，还是乱挥的大锤？<br>是看破一切的读心术士，还是对自己的牌型都一脸懵逼？<br><br>20道真实6人局场景题——<br>没有正确答案，只有最真实的你。</div><button class="btn-start" onclick="thtiOpenNames()">开始测试 &#9824;</button><div class="home-disclaimer">本测试结果纯属娱乐。赢了别谢我，输了也别怪我。</div></div><div id="screen-names"><div class="names-title">&#127920; 先告诉我，你们牌桌上是谁</div><div class="names-sub">这些名字会出现在整个测试中——填上你的牌友，让测试更有代入感！</div><div class="name-input-group"><label class="name-label"><span class="name-badge badge-pro">强</span>你最厉害的牌友叫什么？</label><input class="name-input" id="inp-pro" type="text" maxlength="10" placeholder="Ta能读穿你所有的tells......"/></div><div class="name-input-group"><label class="name-label"><span class="name-badge badge-fish">鱼</span>你最鱼的牌友叫什么？</label><input class="name-input" id="inp-fish" type="text" maxlength="10" placeholder="Ta追每一个底对......"/></div><div class="name-input-group"><label class="name-label"><span class="name-badge badge-mid">中</span>另一个爱打德州的朋友叫什么？</label><input class="name-input" id="inp-mid" type="text" maxlength="10" placeholder="不强不弱，偶尔会给你惊喜......"/></div><button class="btn-names-go" onclick="thtiSubmitNames()">填好了，开始测试 &rarr;</button><div class="names-divider">或者</div><button class="btn-skip" onclick="thtiSkipNames()">直接开始吧，我不在乎</button></div><div id="screen-intro"><div class="intro-deco">&#127920;</div><div class="intro-title">在你开始之前……</div><div class="intro-body">这是你最熟悉的那张牌桌——1/2的现金局，6人坐满。<br><br><b id="intro-name-fish">Judy</b>坐在你左边，总是追底对，靠运气赢了几个底池就飘了。<br><b id="intro-name-pro">Tom</b>在你右边，眼神锐利，三条街都是精准的注码。<br><b id="intro-name-mid">Jack</b>就在对面，不好不坏，但偶尔会给你惊喜——或者惊吓。<br><br>带上你的筹码，带上你的直觉，也带上那个你平时不承认的自己。</div><div class="intro-rules"><p>&#9824; 选完即锁定，无法返回上一题</p><p>&#9824; 毕竟丢出去的筹码，拿不回来</p><p>&#9824; 共20手牌，满分50分，测完看你能打几分</p></div><button class="btn-deal" onclick="thtiDeal()">发牌 — 开始 &#9824;</button></div><div id="screen-quiz"><div class="prog-wrap"><div class="prog-header"><span class="prog-label">THTI · Texas Hold'em Type Indicator</span><span class="prog-count" id="prog-text">0 / 20</span></div><div class="prog-track"><div class="prog-fill" id="prog-bar"></div></div></div><div id="q-area"></div><button class="btn-submit" id="btn-submit" onclick="thtiSubmit()">摊牌 — 查看结果 &#9824;</button></div><div id="screen-result"><div class="result-header"><div class="result-label">你的牌桌人格类型是</div></div><div id="char-card-wrap"></div><div class="share-score"><div class="share-score-label">&#128202; 我的德州综合实力分</div><div class="share-score-number" id="share-score-number">—</div><div class="share-score-sub" id="share-score-rank">满分50分 · 快让朋友也来比比！</div></div><div class="scores-section"><div class="scores-title">&#9658; 你的实战五维评分</div><div id="score-rows"></div></div><div class="friend-callout" id="r-friend-callout"></div><div class="result-funny" id="r-funny"></div><div class="result-desc" id="r-desc"></div><button class="btn-retry" onclick="thtiRetry()">&#128260; 重新测试</button><div class="result-footer">THTI v6.0 · Texas Hold'em Type Indicator<br>基于6人现金局实战场景的人格分析系统 &#9824; &#9829; &#9830; &#9827;<br>本测试结果纯属娱乐，如有雷同，纯属你牌打得太可预测</div></div><script>window._v6qdata=[{"id":"pre1","dim":"PRE","tag":"翻前 · UTG位开局","ctx":"1/2现金局，6人满座。你坐UTG，筹码200。手牌 <b>A♠ J♦</b>。左边是{FISH}（筹码180，今晚跟了4个底池一个没赢），右边是{PRO}（筹码240，打得很紧）。轮到你。","ask":"UTG手持AJo，你怎么做？","opts":[{"tag":"RAISE","cls":"raise","txt":"加注到6（3BB），标准开牌范围，主动建立底池。","scores":{"PRE":3,"READ":2}},{"tag":"FOLD","cls":"fold","txt":"弃牌。AJo在UTG太脆弱，对{PRO}的潜在3-bet没好应对。","scores":{"PRE":2,"READ":3}},{"tag":"LIMP","cls":"call","txt":"跟注2进底池，隐藏手牌实力，看翻牌再说。","scores":{"PRE":1,"READ":1}},{"tag":"ALL-IN","cls":"allin","txt":"推all-in，AJ就是要梭哈，不然怎么赢大底池！","scores":{"PRE":1,"READ":1}}]},{"id":"pre2","dim":"PRE","tag":"翻前 · BTN面对3-bet","ctx":"1/2现金局，6人桌。你在BTN，筹码220，手牌 <b>T♠ T♣</b>。CO位{PRO}（筹码280，今晚3-bet频率偏高）raise到6，你跟注。SB的Alex（筹码190，偏紧，这局第一次3-bet）3-bet到22，{PRO}弃牌。轮到你。","ask":"面对Alex少见的3-bet，TT怎么办？","opts":[{"tag":"CALL","cls":"call","txt":"跟注22，位置在后，找set机会再行动。","scores":{"PRE":3,"READ":2}},{"tag":"FOLD","cls":"fold","txt":"弃牌。Alex极少3-bet，range很窄，TT翻前很可能劣势。","scores":{"PRE":3,"READ":3}},{"tag":"4BET","cls":"raise","txt":"4-bet到60，代表JJ+施压，让Alex陷入困境。","scores":{"PRE":2,"READ":1}},{"tag":"ALL-IN","cls":"allin","txt":"直接推all-in 220，TT就是要梭哈！","scores":{"PRE":1,"READ":1}}]},{"id":"pre3","dim":"PRE","tag":"翻前 · SB面对BTN steal","ctx":"1/2现金局，6人桌。CO/HJ弃牌，BTN的{MID}（筹码230，打法偏松，steal频率高）raise到6。你在SB，手牌 <b>K♥ Q♦</b>，筹码200。BB是{FISH}（筹码160，被动，极少3-bet）。轮到你。","ask":"SB手持KQo，面对{MID}的BTN steal，怎么打？","opts":[{"tag":"3BET","cls":"raise","txt":"3-bet到20，针对{MID}宽松steal范围发动反击。","scores":{"PRE":3,"READ":3}},{"tag":"CALL","cls":"call","txt":"跟注6，OOP但KQ还行，看翻牌情况。","scores":{"PRE":2,"READ":2}},{"tag":"FOLD","cls":"fold","txt":"弃牌。KQo在SB位OOP太难打，选择留力。","scores":{"PRE":2,"READ":1}},{"tag":"ALL-IN","cls":"allin","txt":"直接推all-in，KQ就是值得梭哈的手牌！","scores":{"PRE":1,"READ":1}}]},{"id":"pre4","dim":"PRE","tag":"翻前 · 小对面对多人底池","ctx":"1/2现金局，6人桌。UTG的Sam（筹码210，紧实）raise到7。HJ的{FISH}（筹码180）跟注，CO的{MID}（筹码200）也跟注。你在BTN，手牌 <b>6♣ 6♦</b>，筹码220。底池21，轮到你。","ask":"BTN持66，面对一raise两跟注的多人底池，怎么做？","opts":[{"tag":"CALL","cls":"call","txt":"跟注7，多人底池implied odds好，专心找set。","scores":{"PRE":3,"READ":2}},{"tag":"SQUEEZE","cls":"raise","txt":"Squeeze加注到28，挤压多人底池变单挑。","scores":{"PRE":2,"READ":3}},{"tag":"FOLD","cls":"fold","txt":"弃牌。66面对Sam的紧实range，多人底池打起来难。","scores":{"PRE":2,"READ":2}},{"tag":"ALL-IN","cls":"allin","txt":"推all-in，66就是要梭哈！","scores":{"PRE":1,"READ":1}}]},{"id":"flp1","dim":"FLP","tag":"Flop · 有利牌面C-bet","ctx":"1/2现金局，6人桌。你在BTN，翻前raise到6，只有SB的{FISH}（筹码170，喜欢跟注各种东西）跟注。手牌 <b>A♠ K♣</b>。翻牌 <b>A♦ 7♥ 2♣</b>（彩虹面）。{FISH} check。底池14，你有200。","ask":"翻中顶对顶踢，{FISH}先check，你怎么打？","opts":[{"tag":"BET","cls":"raise","txt":"bet 7（1/2底池），小额引诱{FISH}跟注开始建底池。","scores":{"FLP":3,"READ":3}},{"tag":"CHECK","cls":"check","txt":"Check back，慢玩AK，引诱{FISH}在turn主动下注。","scores":{"FLP":2,"READ":2}},{"tag":"RAISE","cls":"raise","txt":"bet 14（全底池），快速建大底池。","scores":{"FLP":2,"READ":1}},{"tag":"ALL-IN","cls":"allin","txt":"直接推all-in，反正AK在这牌面超强！","scores":{"FLP":1,"READ":1}}]},{"id":"flp2","dim":"FLP","tag":"Flop · 面对donk bet","ctx":"1/2现金局，6人桌。你在CO，翻前raise到6，BTN的{MID}（筹码220）和BB的{FISH}（筹码150）都跟注。三人底池18。手牌 <b>9♠ 9♦</b>。翻牌 <b>9♥ K♣ 4♦</b>——你中了暗三条！{FISH}先donk bet 12，{MID}弃牌。轮到你。","ask":"翻中set！{FISH} donk bet 12，你怎么应对？","opts":[{"tag":"RAISE","cls":"raise","txt":"raise到36，开始value，给{FISH}建更大底池。","scores":{"FLP":3,"READ":3}},{"tag":"CALL","cls":"call","txt":"跟注12，慢玩set，等turn再加大。","scores":{"FLP":2,"READ":2}},{"tag":"ALL-IN","cls":"allin","txt":"直接push all-in，让{FISH}全力追牌！","scores":{"FLP":2,"READ":1}},{"tag":"FOLD","cls":"fold","txt":"弃牌…等等你有set，弃什么？（此选项致敬真实牌桌）","scores":{"FLP":1,"READ":1}}]},{"id":"flp3","dim":"FLP","tag":"Flop · 超强抽牌半诈唬","ctx":"1/2现金局，6人桌。你在BB，翻前{PRO}（BTN，筹码260）raise到6，你跟注。单挑底池12。手牌 <b>J♦ T♦</b>。翻牌 <b>Q♦ 9♣ 3♦</b>——双面顺子+同花抽牌，约15个outs！{PRO} c-bet 8。底池20，你有190。","ask":"面对{PRO}的c-bet，握有超强抽牌，怎么打？","opts":[{"tag":"RAISE","cls":"raise","txt":"raise到28，半诈唬+保护抽牌，给{PRO}施压。","scores":{"FLP":3,"READ":3}},{"tag":"CALL","cls":"call","txt":"跟注8，被动抽牌，保留信息，turn再行动。","scores":{"FLP":2,"READ":2}},{"tag":"ALL-IN","cls":"allin","txt":"推all-in，15个outs梭哈，数学上说得通！","scores":{"FLP":2,"READ":1}},{"tag":"FOLD","cls":"fold","txt":"弃牌。没有成牌不该浪费钱。","scores":{"FLP":1,"READ":1}}]},{"id":"flp4","dim":"FLP","tag":"Flop · 危险牌面超对","ctx":"1/2现金局，6人桌。你在HJ，手牌 <b>A♥ A♣</b>，翻前3-bet到18，只有BTN的{PRO}（筹码240）跟注。单挑底池38。翻牌 <b>K♠ Q♦ J♣</b>——高度连接的危险牌面。{PRO} check。底池38，你有180。","ask":"AA面对KQJ危险翻牌，{PRO}先check，你怎么应对？","opts":[{"tag":"CHECK","cls":"check","txt":"Check back，KQJ牌面AA已很危险，优先控制底池。","scores":{"FLP":3,"READ":3}},{"tag":"BET","cls":"raise","txt":"bet 14（约1/3底池），小额blocking bet试探{PRO}反应。","scores":{"FLP":2,"READ":2}},{"tag":"RAISE","cls":"raise","txt":"bet 28（3/4底池），AA还是要打价值，不能软。","scores":{"FLP":2,"READ":1}},{"tag":"ALL-IN","cls":"allin","txt":"推all-in 180，AA就是AA，没什么好怕的！","scores":{"FLP":1,"READ":1}}]},{"id":"trv1","dim":"TRV","tag":"Turn · 顶对面对J出现","ctx":"1/2现金局，6人桌。你在CO，手牌 <b>K♥ Q♣</b>，翻前raise到6，只有BTN的{FISH}（筹码160，跟注型）跟注。翻牌 <b>K♦ 7♣ 2♠</b>，你bet 8，{FISH}跟。Turn <b>J♠</b>出现。底池34，你有180。{FISH} check。","ask":"Turn出J，顶对顶踢，{FISH} check，你怎么打？","opts":[{"tag":"CHECK","cls":"check","txt":"Check back，J让牌面变复杂，控制底池看river。","scores":{"TRV":3,"READ":3}},{"tag":"BET","cls":"raise","txt":"bet 16（约1/2底池），继续价值，{FISH}跟注range很宽。","scores":{"TRV":3,"READ":2}},{"tag":"RAISE","cls":"raise","txt":"bet 34（全底池），大额施压让{FISH}做艰难决定。","scores":{"TRV":2,"READ":1}},{"tag":"ALL-IN","cls":"allin","txt":"推all-in，一波带走，不给{FISH}任何抽牌机会！","scores":{"TRV":1,"READ":1}}]},{"id":"trv2","dim":"TRV","tag":"Turn · 诈唬还是放弃","ctx":"1/2现金局，6人桌。你在BTN，手牌 <b>A♣ 5♣</b>，翻前raise到6，只有BB的{MID}（筹码210，打法偏紧）跟注。翻牌 <b>K♠ 9♦ 3♣</b>，你c-bet 8，{MID}跟注。Turn <b>Q♣</b>（你有同花后门）。底池34，你有180。{MID} check。","ask":"Turn出Q，你仍然nothing，{MID} check，继续诈唬吗？","opts":[{"tag":"BET","cls":"raise","txt":"bet 22（约2/3底池），代表AK/QQ继续施压{MID}。","scores":{"TRV":3,"READ":3}},{"tag":"CHECK","cls":"check","txt":"Check back，不扩大损失，看river能否抽中。","scores":{"TRV":2,"READ":2}},{"tag":"RAISE","cls":"raise","txt":"bet 34（全底池），让{MID}面临最大压力。","scores":{"TRV":2,"READ":1}},{"tag":"ALL-IN","cls":"allin","txt":"推all-in，诈唬就要做彻底！","scores":{"TRV":1,"READ":1}}]},{"id":"trv3","dim":"TRV","tag":"Turn · 被check-raise","ctx":"1/2现金局，6人桌。你在BTN，手牌 <b>T♠ T♦</b>，翻前raise到6，只有SB的Sam（筹码200，偏紧）跟注。翻牌 <b>8♦ 5♥ 2♣</b>，你bet 8，Sam跟注。Turn <b>3♦</b>，你bet 16，Sam check-raise到50。底池78，你有160。","ask":"Turn被Sam的check-raise，TT超对怎么应对？","opts":[{"tag":"FOLD","cls":"fold","txt":"弃牌。Sam这个check-raise几乎都是强牌，TT让步。","scores":{"TRV":3,"READ":3}},{"tag":"CALL","cls":"call","txt":"跟注50，看river再决定，不扩大损失。","scores":{"TRV":2,"READ":2}},{"tag":"RAISE","cls":"raise","txt":"3-bet到130，代表value还击，看Sam反应。","scores":{"TRV":2,"READ":1}},{"tag":"ALL-IN","cls":"allin","txt":"推all-in，TT超对就是要赌，不能软！","scores":{"TRV":1,"READ":1}}]},{"id":"trv4","dim":"TRV","tag":"Turn · 变成两对的节奏","ctx":"1/2现金局，6人桌。你在SB，手牌 <b>A♦ 9♦</b>，翻前raise到6，只有BB的{FISH}（筹码150，跟注型）跟注。翻牌 <b>A♣ 6♥ 2♠</b>，你bet 8，{FISH}跟注。Turn <b>9♣</b>——你变成了两对！底池34，你有180。{FISH} check。","ask":"Turn出9变成两对，{FISH} check，怎么打？","opts":[{"tag":"BET","cls":"raise","txt":"bet 16（约1/2底池），继续建底池，两对值得价值下注。","scores":{"TRV":3,"READ":3}},{"tag":"CHECK","cls":"check","txt":"Check，慢玩引诱{FISH}在river主动下注。","scores":{"TRV":2,"READ":2}},{"tag":"RAISE","cls":"raise","txt":"bet 34（全底池），最大化价值。","scores":{"TRV":2,"READ":1}},{"tag":"ALL-IN","cls":"allin","txt":"推all-in，两对超强，{FISH}的筹码都是我的！","scores":{"TRV":1,"READ":1}}]},{"id":"rvr1","dim":"RVR","tag":"River · 三街后的薄价值","ctx":"1/2现金局，6人桌。你在CO，手牌 <b>Q♠ J♣</b>，翻前raise到6，只有BTN的{FISH}（筹码140）跟注。翻牌 <b>Q♦ 8♣ 3♥</b>，你bet 8，{FISH}跟；Turn <b>5♠</b>，你bet 14，{FISH}跟。River <b>2♦</b>（砖头无听牌）。底池62，你有160。{FISH} check。","ask":"River砖头，顶对，{FISH} check，怎么打？","opts":[{"tag":"BET","cls":"raise","txt":"bet 24（约1/3底池），薄价值榨取{FISH}最后的跟注。","scores":{"RVR":3,"READ":3}},{"tag":"CHECK","cls":"check","txt":"Check，赢了两街已够，锁定底池。","scores":{"RVR":2,"READ":2}},{"tag":"RAISE","cls":"raise","txt":"bet 50（约3/4底池），大价值，{FISH} range很宽。","scores":{"RVR":2,"READ":1}},{"tag":"ALL-IN","cls":"allin","txt":"推all-in，顶对就是要最大化！","scores":{"RVR":1,"READ":1}}]},{"id":"rvr2","dim":"RVR","tag":"River · 面对强手的raise","ctx":"1/2现金局，6人桌。你在BTN，手牌 <b>A♠ Q♦</b>，翻前跟注{PRO}（SB，筹码240）的3-bet到18。翻牌 <b>A♥ 8♣ 3♦</b>，{PRO} bet 20你call；Turn <b>2♣</b>，{PRO} bet 30你call。River <b>7♠</b>，你bet 50，{PRO} raise all-in到180。底池280，你需要call 130。","ask":"River被{PRO}的raise，AQ顶对顶踢脚，怎么做？","opts":[{"tag":"FOLD","cls":"fold","txt":"弃牌。{PRO}三街主动且river raise，他的range几乎都赢AQ。","scores":{"RVR":3,"READ":3}},{"tag":"CALL","cls":"call","txt":"跟注。赔率够，AQ是顶对，{PRO}偶尔也可能在诈唬。","scores":{"RVR":2,"READ":2}},{"tag":"RAISE","cls":"raise","txt":"再加注！我就是要让{PRO}知道谁才是这桌的老大！","scores":{"RVR":1,"READ":1}},{"tag":"ALL-IN","cls":"allin","txt":"推all-in，AQ大牌，不信邪！","scores":{"RVR":1,"READ":1}}]},{"id":"rvr3","dim":"RVR","tag":"River · 错失抽牌的诈唬","ctx":"1/2现金局，6人桌。你在BB，手牌 <b>7♦ 6♦</b>，翻前跟注{MID}（CO，筹码200）的raise到6。翻牌 <b>K♦ 9♦ 3♣</b>（你有同花抽牌），你check-call {MID}的8。Turn <b>J♥</b>，你check-call {MID}的16。River <b>2♠</b>——同花完全未中。底池62，你有160，轮到你先行动。","ask":"完全错失抽牌，你先行动，{MID}还有160，怎么办？","opts":[{"tag":"BET","cls":"raise","txt":"bet 30（约1/2底池），代表完成的同花诈唬{MID}。","scores":{"RVR":3,"READ":3}},{"tag":"RAISE","cls":"raise","txt":"bet 62（全底池），大额让{MID}无法轻松跟注。","scores":{"RVR":2,"READ":2}},{"tag":"CHECK","cls":"check","txt":"Check，没牌认命，看{MID}会不会也check。","scores":{"RVR":2,"READ":1}},{"tag":"ALL-IN","cls":"allin","txt":"推all-in，诈唬不彻底不算诈唬！","scores":{"RVR":1,"READ":1}}]},{"id":"rvr4","dim":"RVR","tag":"River · 双A牌面的读人","ctx":"1/2现金局，6人桌。你在SB，手牌 <b>K♣ K♦</b>，翻前3-bet到18，只有BB的{FISH}（筹码130）跟注。翻牌 <b>J♥ 8♣ 4♦</b>，你bet 20，{FISH} call；Turn <b>A♠</b>，你check，{FISH} bet 30，你call；River <b>A♦</b>——第二张A。底池126，{FISH} bet 60（接近全底池）。","ask":"River出第二张A，{FISH}全底池下注，KK怎么处理？","opts":[{"tag":"FOLD","cls":"fold","txt":"弃牌。两张A面对{FISH}大额下注，KK价值暴跌。","scores":{"RVR":3,"READ":3}},{"tag":"CALL","cls":"call","txt":"跟注60。{FISH}常追底对，很可能是Jx/8x在价值下注。","scores":{"RVR":2,"READ":2}},{"tag":"RAISE","cls":"raise","txt":"raise到160，试探{FISH}，看他敢不敢call。","scores":{"RVR":1,"READ":1}},{"tag":"ALL-IN","cls":"allin","txt":"推all-in，KK还是KK，不信{FISH}手里有A！","scores":{"RVR":1,"READ":1}}]},{"id":"read1","dim":"READ","tag":"读人 · 三街下注模式","ctx":"1/2现金局，6人桌。你在HJ，手牌 <b>J♠ J♦</b>，翻前raise到6，BTN的{MID}（筹码210，今晚VPIP 45%，PFR 12%）3-bet到18，你跟注。翻牌 <b>9♦ 4♣ 2♠</b>，你check，{MID} bet 20（3/4底池）。Turn <b>7♥</b>，你check，{MID} bet 40。River <b>3♣</b>，你check。{MID} bet 80（接近底池）。底池约200，你需要call 80。","ask":"{MID}三街大尺度下注，JJ面对river bet，怎么做？","opts":[{"tag":"CALL","cls":"call","txt":"跟注80。{MID} VPIP高，他可能三街都在拿弱牌诈唬。","scores":{"READ":3,"RVR":2}},{"tag":"FOLD","cls":"fold","txt":"弃牌。{MID}三街大注代表强range，JJ赢的比例不高。","scores":{"READ":3,"RVR":3}},{"tag":"RAISE","cls":"raise","txt":"check-raise all-in反将一军，看{MID}能不能接住。","scores":{"READ":1,"RVR":1}},{"tag":"ALL-IN","cls":"allin","txt":"推all-in！我就是要{MID}知道JJ不是好欺负的！","scores":{"READ":1,"RVR":1}}]},{"id":"read2","dim":"READ","tag":"读人 · 肢体语言解读","ctx":"1/2线下现金局，6人桌。你在CO，手牌 <b>A♦ K♦</b>，翻前raise到6，只有SB的Alex（筹码200，新面孔，整局沉默稳定）call。翻牌 <b>A♠ Q♣ 8♦</b>，Alex check，你bet 8，Alex call时手指轻敲桌面，身体微微前倾。Turn <b>J♥</b>，Alex check。底池34，你有180。","ask":"Turn出J，Alex有些肢体信号，你有顶对顶踢，怎么打？","opts":[{"tag":"CHECK","cls":"check","txt":"Check back，J把直线听牌带出来，Alex的tells让我不安，控制底池。","scores":{"READ":3,"TRV":3}},{"tag":"BET","cls":"raise","txt":"bet 16，以手牌价值为主，肢体信号不够可靠。","scores":{"READ":2,"TRV":2}},{"tag":"RAISE","cls":"raise","txt":"bet 34，大额施压，tells or not，AK就是要打价值。","scores":{"READ":1,"TRV":1}},{"tag":"ALL-IN","cls":"allin","txt":"推all-in，管他什么tells，AK就是要全下！","scores":{"READ":1,"TRV":1}}]},{"id":"read3","dim":"READ","tag":"读人 · 情绪状态判断","ctx":"1/2现金局，6人桌。你在BTN，筹码220。{FISH}（SB，筹码90）今晚连输4个底池，刚在river被Sam打爆，明显tilt——不断叹气，摆弄筹码速度越来越快，眼神飘忽。{FISH}突然push all-in 90。你手牌 <b>8♠ 8♣</b>，BB已弃牌。","ask":"面对tilt中{FISH}的all-in，88怎么处理？","opts":[{"tag":"CALL","cls":"call","txt":"跟注。Tilt玩家push range极宽，88胜率合理。","scores":{"READ":3,"PRE":3}},{"tag":"RAISE","cls":"raise","txt":"加注隔离，防止BB加入，单挑{FISH}更有把握。","scores":{"READ":3,"PRE":2}},{"tag":"FOLD","cls":"fold","txt":"弃牌。即使tilt，{FISH}的all-in range也可能撞上JJ+/AK。","scores":{"READ":2,"PRE":2}},{"tag":"CHECK","cls":"check","txt":"Check……等等，{FISH}已经all-in了，我没有check选项。","scores":{"READ":1,"PRE":1}}]},{"id":"read4","dim":"READ","tag":"读人 · 异常下注尺度","ctx":"1/2现金局，6人桌。你在BB，手牌 <b>Q♣ Q♠</b>，筹码210。UTG的{PRO}（筹码260，今晚一直标准3BB开牌）突然open raise到12（6BB，远超平时）。其余人都弃到你，底池14，轮到你。","ask":"{PRO}反常超大size开牌，你手持QQ，怎么应对？","opts":[{"tag":"3BET","cls":"raise","txt":"3-bet到36，看{PRO}是否4-bet来确认他的强range。","scores":{"READ":3,"PRE":3}},{"tag":"FOLD","cls":"fold","txt":"弃牌。{PRO}异常大size很可能是AA/KK，QQ可能dominated。","scores":{"READ":3,"PRE":2}},{"tag":"CALL","cls":"call","txt":"跟注12，保留信息，看翻牌再做决定。","scores":{"READ":2,"PRE":2}},{"tag":"ALL-IN","cls":"allin","txt":"直接推all-in，QQ是大牌，就是要全下！","scores":{"READ":1,"PRE":1}}]}];window._v6tdata=[{"id":"SURGEON","name":"手术刀","code":"SURG-1","group":"分析派","tagline":"每一刀切在正确的地方，每一注落在正确时机。","funny":"你打牌的方式让{FISH}觉得坐在手术台上——清醒着，完全无法反抗。你的每一个决定都精确到小数点后三位，让{PRO}都得多想一秒。","desc":"你在翻前就规划好了整手牌的三条街走法。手牌选择极高，打法主动精准，c-bet有逻辑，价值注码层次分明。{FISH}是你最稳定的ATM，{MID}在你面前也会犹豫。唯一的问题是，太精确了反而容易被{PRO}这样的人逆向工程。","maxScores":{"PRE":10,"FLP":10,"TRV":9,"RVR":9,"READ":9}},{"id":"MACHINE","name":"GTO机器","code":"GTO-X","group":"分析派","tagline":"求解器说混合策略是37%raise，我就37%raise。","funny":"你在1/2的牌桌上算纳什均衡，就像用GPS导航去厕所。你面对的{FISH}根本不知道GTO是什么，但你依然坚持平衡策略。{PRO}倒是能感受到你的理论深度。","desc":"你对理论有深入研究，懂得平衡、range和频率的重要性。打法很难被剥削，但你也很难剥削{FISH}这类完全不理性的对手。{MID}是个特别好的练手对象，但面对{FISH}，solver给的最优解可能根本不是最优解。","maxScores":{"PRE":9,"FLP":9,"TRV":8,"RVR":8,"READ":6}},{"id":"TRAPPER","name":"装死者","code":"TRAP-Z","group":"分析派","tagline":"我的check不是弱，是邀请函。","funny":"你最享受的时刻是：{FISH}push all-in，你缓缓翻牌，然后看着他的脸慢慢垮下来。你把这叫做'艺术'，{FISH}叫它'你怎么又有牌'，{PRO}叫它'该死'。","desc":"你对慢玩和陷阱的运用炉火纯青，喜欢用强牌check引诱{FISH}主动，在恰当时机发动致命一击。{MID}面对你经常犹豫不决，{PRO}有时能识破你，但也不总是对的。","maxScores":{"PRE":7,"FLP":8,"TRV":9,"RVR":9,"READ":8}},{"id":"READER","name":"读心术士","code":"READ-R","group":"分析派","tagline":"你下注的方式、你的呼吸频率、你左手小指的弯曲角度……","funny":"你是牌桌上的福尔摩斯，能从{FISH}喝水的速度判断他有没有强牌。你对{MID}的reads经常准确，{PRO}有时候也会被你看穿，但偶尔你读错了，然后你会花三天时间复盘那个tells。","desc":"你对对手行为模式的分析令人印象深刻，注意到下注尺度、节奏、肢体语言的细节。{FISH}在你眼里是本打开的书，{MID}偶尔有盲点，{PRO}才是真正的挑战。常能做出看似不可思议的正确call或fold。","maxScores":{"PRE":7,"FLP":8,"TRV":8,"RVR":8,"READ":10}},{"id":"SNIPER","name":"狙击手","code":"SNIP-R","group":"猎手派","tagline":"等待是为了一击必中，耐心本身就是武器。","funny":"你可以坐两小时不进一个底池，让{FISH}以为你在打瞌睡，让{MID}放松警惕。然后——砰，你拿到AA，全桌人的筹码像被磁铁吸走一样。效率极高，每小时翻牌次数极低。","desc":"手牌选择极为严格，只在高价值场合出手。赢率惊人但参与率低。你擅长等待{FISH}犯错再给予精准惩罚，{MID}经常看不穿你。缺点是范围太透明，{PRO}在你加注时经常立刻弃牌。","maxScores":{"PRE":9,"FLP":8,"TRV":8,"RVR":7,"READ":7}},{"id":"BULLY","name":"欺负人的","code":"BUL-LY","group":"猎手派","tagline":"你是提款机，我就是取款码。","funny":"你发现了一件事：{FISH}不喜欢压力，所以你就一直给{FISH}压力。策略简单粗暴：找到桌上最弱的人，然后在每一手牌都往他身上倒筹码。{MID}也会被你欺负，{PRO}才是你要小心的对象。","desc":"你擅长识别对手弱点，并系统性地加以利用。{FISH}是你的主要收入来源，{MID}也经常中招。打法主动激进，能从软目标身上稳定获利，但踢到{PRO}这块铁板时会很痛。","maxScores":{"PRE":8,"FLP":8,"TRV":7,"RVR":7,"READ":8}},{"id":"SHOVER","name":"全下侠","code":"SHOV-R","group":"猎手派","tagline":"All-in是解决一切问题的答案。","funny":"你把复杂的多街博弈浓缩成一个问题：推还是不推？答案通常是：推。{FISH}被你推怕了，{MID}不知道该怎么应对你，{PRO}则笑着call你。效率极高，EV存疑。","desc":"打法直接霸气，减少了复杂的多街博弈。你相信让对手做最困难的决定才是最好的策略。{FISH}经常被你吓弃掉好牌，{MID}面对你会犹豫，但{PRO}会根据赔率冷静call你。你失去了大量薄价值机会。","maxScores":{"PRE":6,"FLP":7,"TRV":6,"RVR":5,"READ":5}},{"id":"BLUFFER","name":"诈唬王","code":"BLUF-R","group":"猎手派","tagline":"我有牌，就是不告诉你是什么牌。","funny":"你对诈唬有着近乎艺术家的执着。每次bluff成功，你都会在内心给自己竖大拇指。问题是当{FISH}进入call station模式，你还在坚持bluff {FISH}——这叫做'艺术先于理智'。{PRO}看穿了你，但{MID}经常被你搞定。","desc":"你理解虚张声势的力量，且乐于使用它。不可预测性是你最大的武器。对{FISH}bluff效率极低，对{MID}效果不错，对{PRO}需要格外谨慎。bluff频率需要精准校准——在对的对象面前是艺术，在{FISH}面前是捐款。","maxScores":{"PRE":6,"FLP":7,"TRV":7,"RVR":6,"READ":7}},{"id":"CALLER","name":"跟注站","code":"CALL-R","group":"摸鱼派","tagline":"只要跟注，就有机会。也许。","funny":"你的人生哲学是：折叠是懦夫，all-in是赌徒，所以你选择——跟注。{PRO}把你列为最喜欢的对手，{MID}觉得和你打很轻松，就连{FISH}有时候都能赢你——因为{FISH}也在跟注，然后偶尔打中了。","desc":"你极少主动发起攻势，更习惯跟注和check。你相信'看到最后才知道谁赢'，但忽视了大量对手主动行动时的EV优势。{PRO}在你身上能稳定赚钱，{MID}也学会了如何利用你，就连{FISH}遇上你都不虚。","maxScores":{"PRE":4,"FLP":4,"TRV":5,"RVR":5,"READ":5}},{"id":"FISH","name":"行走的提款机","code":"FISH-Y","group":"摸鱼派","tagline":"我只是来玩玩的，顺便交点学费。","funny":"你是整张牌桌最受欢迎的人。{PRO}喜欢和你同桌，{MID}在你旁边打得特别自信，甚至你的朋友{FISH}（你真实世界中那个更鱼的朋友）——哦等等，你可能就是那个{FISH}。","desc":"手牌选择偏宽，常常在不利的牌面追逐抽牌。翻牌后决策偏感性而非理性。你的lose rate稳定而优雅，为整桌建立了良好的游戏生态。好消息是，任何人通过学习基本原则都能快速提升，你也一样。","maxScores":{"PRE":3,"FLP":3,"TRV":3,"RVR":3,"READ":3}},{"id":"TILTER","name":"上头怪","code":"TILT-R","group":"摸鱼派","tagline":"这不是tilt，这是战术愤怒。","funny":"你输了一手牌后，raise频率提升300%，hand selection下降400%。{PRO}会偷偷庆祝你进入tilt模式，{MID}也会趁机下手，就连{FISH}都会在你tilt的时候神奇地赢你几手。你自己也知道，但就是控制不住。","desc":"你的情绪在牌桌上是透明的。连续失利后，决策质量显著下降。{PRO}能系统性地利用你的情绪，{MID}偶尔也会跟着收割。学会识别自己的tilt信号，是你比{FISH}更需要学的功课。","maxScores":{"PRE":4,"FLP":4,"TRV":4,"RVR":4,"READ":4}},{"id":"LUCKY","name":"锦鲤本鲤","code":"LUCK-Y","group":"摸鱼派","tagline":"不是我运气好，是宇宙选择了我。","funny":"你把每次bad beat归因于{PRO}运气好，每次赢牌归因于自己直觉。坦白说，你打牌的逻辑和买彩票差不多，但比彩票有趣。统计数据表明，你的赢率短期内惊人，长期……{PRO}最清楚。","desc":"你相信直觉和运气，手牌选择和下注都偏感性。可能在短期内取得惊人成绩让{MID}羡慕，但方差极高。{PRO}笑你，{FISH}崇拜你，{MID}搞不清楚你是真厉害还是真幸运。","maxScores":{"PRE":4,"FLP":4,"TRV":4,"RVR":5,"READ":4}},{"id":"NIT","name":"紧蛋","code":"NIT-TY","group":"守护派","tagline":"等到AA再动，否则宁可坐着看。","funny":"你上一次voluntarily进底池是什么时候？也许是上个月？{FISH}在你旁边打得很开心，因为你永远不打扰他。当你终于加注时，连{FISH}都知道你有AA或KK，更别说{PRO}了。","desc":"手牌范围极窄，折叠率全桌最高。优点是赢率稳定，几乎不犯大错。缺点是每小时期望值低，范围太透明。{PRO}在你加注时会直接弃牌，{MID}也学会了，所以你赢了大牌也赢不到大底池。","maxScores":{"PRE":8,"FLP":7,"TRV":7,"RVR":7,"READ":6}},{"id":"COACHER","name":"免费教练","code":"COAC-H","group":"守护派","tagline":"这手牌从EV角度，你的check-call是一个严重错误……","funny":"牌桌是你的教室，{FISH}是你最爱的学生（不管他愿不愿意听）。你最喜欢的时刻是{FISH}打错牌之后，详细分析他应该怎么打。{PRO}不需要你教，{MID}有时候觉得你说得有道理。","desc":"你对牌理有深入研究，且乐于分享。复盘能力强，能分析{FISH}、{MID}和自己的错误。但有时过于理论化，实战中偶尔反应稍慢，或因知道太多而在边缘情况里对着{MID}过度解析。","maxScores":{"PRE":8,"FLP":7,"TRV":8,"RVR":8,"READ":7}},{"id":"BADB","name":"永远的受害者","code":"BAD-B","group":"守护派","tagline":"我今天的运气真的太差了……","funny":"你输钱的原因永远是：{FISH}运气好、牌桌不公平、那张river牌实在太过分。你赢钱的原因是：你打得好。这套归因体系完美自洽，{PRO}懒得反驳你，{MID}有时候被你说服了，但{FISH}什么都不知道。","desc":"你的打法中等偏上，但情绪容易受结果影响。你会将坏结果归因于{FISH}或{PRO}的运气，而非自己的决策质量，这让你难以进步。建立客观的复盘习惯是你最重要的功课。","maxScores":{"PRE":5,"FLP":5,"TRV":5,"RVR":5,"READ":5}},{"id":"SHOWOFF","name":"表演艺术家","code":"SHOW-F","group":"守护派","tagline":"赢了要秀牌，输了要讲故事。","funny":"你打牌的主要目的不是赢钱，而是制造难忘的故事，最好是关于怎么把{PRO}搞定的。你会在成功bluff后翻牌给{FISH}看，然后接受掌声。{PRO}不为所动，{MID}觉得你挺有意思，{FISH}看得目瞪口呆。","desc":"你享受牌桌上的社交和表演元素，打法偏向戏剧性，有时会为制造效果而做出EV负的决策。你是牌桌气氛的制造者，{FISH}最喜欢你这种对手，{MID}搞不清楚你在干嘛，{PRO}冷静地收割你。","maxScores":{"PRE":5,"FLP":6,"TRV":5,"RVR":6,"READ":6}}];window._typeThemes={"SURGEON":{"bg":"linear-gradient(160deg,#3d1f6e,#6a35b0,#1a0a30)","badge":"#c080ff","badgeBg":"rgba(160,80,255,.15)","badgeBorder":"rgba(160,80,255,.4)","scoreColor":"#c080ff"},"MACHINE":{"bg":"linear-gradient(160deg,#1a3050,#2a5080,#0a1828)","badge":"#00d4ff","badgeBg":"rgba(0,212,255,.1)","badgeBorder":"rgba(0,212,255,.4)","scoreColor":"#00d4ff"},"TRAPPER":{"bg":"linear-gradient(160deg,#0a0a1e,#1a1a3a,#080818)","badge":"#e056fd","badgeBg":"rgba(224,86,253,.1)","badgeBorder":"rgba(224,86,253,.4)","scoreColor":"#e056fd"},"READER":{"bg":"linear-gradient(160deg,#2a1050,#5a30a0,#160830)","badge":"#a080e0","badgeBg":"rgba(160,128,224,.12)","badgeBorder":"rgba(160,128,224,.4)","scoreColor":"#a080e0"},"SNIPER":{"bg":"linear-gradient(160deg,#1a2808,#3a5010,#0e1804)","badge":"#80c040","badgeBg":"rgba(128,192,64,.1)","badgeBorder":"rgba(128,192,64,.4)","scoreColor":"#80c040"},"BULLY":{"bg":"linear-gradient(160deg,#3a0808,#801010,#1e0404)","badge":"#ff4040","badgeBg":"rgba(255,64,64,.1)","badgeBorder":"rgba(255,64,64,.4)","scoreColor":"#ff6040"},"SHOVER":{"bg":"linear-gradient(160deg,#3a1a00,#805020,#1e0c00)","badge":"#f0a030","badgeBg":"rgba(240,160,48,.1)","badgeBorder":"rgba(240,160,48,.4)","scoreColor":"#f0a030"},"BLUFFER":{"bg":"linear-gradient(160deg,#380810,#801828,#1c0408)","badge":"#ff6080","badgeBg":"rgba(255,96,128,.1)","badgeBorder":"rgba(255,96,128,.4)","scoreColor":"#ff6080"},"CALLER":{"bg":"linear-gradient(160deg,#0a2038,#185068,#061018)","badge":"#40a0d0","badgeBg":"rgba(64,160,208,.1)","badgeBorder":"rgba(64,160,208,.4)","scoreColor":"#40a0d0"},"FISH":{"bg":"linear-gradient(160deg,#083820,#106838,#041c10)","badge":"#40d080","badgeBg":"rgba(64,208,128,.1)","badgeBorder":"rgba(64,208,128,.4)","scoreColor":"#40d080"},"TILTER":{"bg":"linear-gradient(160deg,#380808,#801010,#200404)","badge":"#ff4020","badgeBg":"rgba(255,64,32,.1)","badgeBorder":"rgba(255,64,32,.4)","scoreColor":"#ff5030"},"LUCKY":{"bg":"linear-gradient(160deg,#302008,#705018,#181004)","badge":"#f0c030","badgeBg":"rgba(240,192,48,.1)","badgeBorder":"rgba(240,192,48,.4)","scoreColor":"#f0c030"},"NIT":{"bg":"linear-gradient(160deg,#0a1830,#203060,#060c18)","badge":"#6080c0","badgeBg":"rgba(96,128,192,.1)","badgeBorder":"rgba(96,128,192,.4)","scoreColor":"#8090d0"},"COACHER":{"bg":"linear-gradient(160deg,#152808,#305818,#0a1404)","badge":"#80b040","badgeBg":"rgba(128,176,64,.1)","badgeBorder":"rgba(128,176,64,.4)","scoreColor":"#90c050"},"BADB":{"bg":"linear-gradient(160deg,#182810,#304820,#0c1408)","badge":"#80a060","badgeBg":"rgba(128,160,96,.1)","badgeBorder":"rgba(128,160,96,.4)","scoreColor":"#90b070"},"SHOWOFF":{"bg":"linear-gradient(160deg,#280838,#601880,#140418)","badge":"#e056fd","badgeBg":"rgba(224,86,253,.12)","badgeBorder":"rgba(224,86,253,.4)","scoreColor":"#e056fd"}};</script><script>window._svgArt={};document.querySelectorAll("#svg-store > div").forEach(function(el){window._svgArt[el.id.replace("svgt-","")]=el.innerHTML;});</script><script>(function(){
+  var _qs=[], _cur=0, _ans={}, _lastDim='';
+  window._names={pro:'Tom',fish:'Judy',mid:'Jack'};
+  window._currentQs=_qs;
+  window._currentAns=_ans;
+  var dimNames={PRE:'翻前',FLP:'Flop',TRV:'Turn',RVR:'River',READ:'读人'};
+
+  function rn(s){
+    if(!s) return s;
+    return s.split('{PRO}').join(window._names.pro)
+             .split('{FISH}').join(window._names.fish)
+             .split('{MID}').join(window._names.mid);
   }
-  
+  function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
   function getAllQ(){
-    var qData=JSON.parse(document.getElementById('thti-q-data').textContent);
-    var raw=qData.map(function(q){
-      var qc=JSON.parse(JSON.stringify(q));
-      qc._opts=shuffle(qc.opts.slice());
-      return qc;
+    var qData=window._v6qdata;
+    var dims=['PRE','FLP','TRV','RVR','READ'];
+    var grouped={PRE:[],FLP:[],TRV:[],RVR:[],READ:[]};
+    qData.forEach(function(q){if(grouped[q.dim])grouped[q.dim].push(q);});
+    var result=[];
+    dims.forEach(function(d){
+      var qs=shuffle(grouped[d].slice());
+      qs.forEach(function(q){var qc=JSON.parse(JSON.stringify(q));qc._opts=shuffle(qc.opts.slice());result.push(qc);});
     });
-    return shuffle(raw);
+    return result;
   }
-  
   function updateProgress(){
-    var total=_qs.length;
-    var answered=Object.keys(_ans).length;
-    var pct=(answered/total)*100;
-    document.getElementById('prog-bar').style.width=pct+'%';
+    var total=_qs.length,answered=Object.keys(_ans).length;
+    document.getElementById('prog-bar').style.width=(answered/total*100)+'%';
     document.getElementById('prog-text').textContent=answered+' / '+total;
   }
-  
   function renderQ(){
     var q=_qs[_cur];
-    var total=_qs.length;
     updateProgress();
     var isAnswered=(_ans[q.id]!==undefined);
-    
+    var dimHeader='';
+    if(q.dim!==_lastDim){_lastDim=q.dim;dimHeader='<div class="group-label">'+String.fromCharCode(9658)+' '+dimNames[q.dim]+'维度</div>';}
     var optsHtml=q._opts.map(function(opt,i){
       var sel=(_ans[q.id]===i)?' selected':'';
-      // If answered, lock all buttons; selected one stays highlighted
       var lock=isAnswered?' locked':'';
-      return '<button class="opt-btn'+sel+lock+'" '+(isAnswered?'disabled':'')+' onclick="thtiSelect('+i+')"><span class="opt-tag '+opt.cls+'">'+opt.tag+'</span>'+opt.txt+'</button>';
+      return '<button class="opt-btn'+sel+lock+'" '+(isAnswered?'disabled':'')+' onclick="thtiSelect('+i+')">'
+        +'<span class="opt-tag '+opt.cls+'">'+opt.tag+'</span>'+rn(opt.txt)+'</button>';
     }).join('');
-    
-    document.getElementById('q-area').innerHTML=
-      '<div class="q-card">'+
-      '<div class="q-tag">'+q.tag+'</div>'+
-      '<div class="q-context">'+q.ctx+'</div>'+
-      '<div class="q-ask">'+q.ask+'</div>'+
-      '<div class="options">'+optsHtml+'</div>'+
-      '</div>';
-    
-    // No nav buttons - handled inline
-    // Show submit only when all answered and on last
-    var isLast=(_cur===total-1);
-    var allAns=(Object.keys(_ans).length===total);
+    document.getElementById('q-area').innerHTML=dimHeader
+      +'<div class="q-card"><div class="q-dim">'+dimNames[q.dim]+'</div>'
+      +'<div class="q-tag">'+rn(q.tag)+'</div>'
+      +'<div class="q-context">'+rn(q.ctx)+'</div>'
+      +'<div class="q-ask">'+rn(q.ask)+'</div>'
+      +'<div class="options">'+optsHtml+'</div></div>';
+    var isLast=(_cur===_qs.length-1),allAns=(Object.keys(_ans).length===_qs.length);
     var sub=document.getElementById('btn-submit');
-    if(isLast&&allAns){
-      sub.classList.add('visible');
-    } else {
-      sub.classList.remove('visible');
-    }
+    if(isLast&&allAns)sub.classList.add('visible'); else sub.classList.remove('visible');
   }
-  
   window.thtiSelect=function(idx){
     var q=_qs[_cur];
-    if(_ans[q.id]!==undefined) return; // already answered, ignore
+    if(_ans[q.id]!==undefined)return;
     _ans[q.id]=idx;
-    renderQ(); // re-render to lock options
-    
-    // Advance after delay
+    renderQ();
     if(_cur<_qs.length-1){
-      setTimeout(function(){
-        _cur++;
-        renderQ();
-        // Scroll to top of quiz area
-        var qa=document.getElementById('q-area');
-        if(qa) qa.scrollIntoView({behavior:'smooth',block:'start'});
-      },480);
+      setTimeout(function(){_cur++;_lastDim='';renderQ();var qa=document.getElementById('q-area');if(qa)qa.scrollIntoView({behavior:'smooth',block:'start'});},480);
     } else {
-      // Last question - show submit after short delay
-      setTimeout(function(){
-        var sub=document.getElementById('btn-submit');
-        if(sub) sub.classList.add('visible');
-        sub.scrollIntoView({behavior:'smooth',block:'center'});
-      },500);
+      setTimeout(function(){var sub=document.getElementById('btn-submit');if(sub){sub.classList.add('visible');sub.scrollIntoView({behavior:'smooth',block:'center'});}},500);
     }
   };
-  
-  // nav disabled (no back)
-  window.thtiNav=function(dir){ /* locked */ };
-  
   function calcScores(){
-    var raw={PRE:0,FLP:0,TRV:0,READ:0,PSY:0};
-    var dimMax={PRE:0,FLP:0,TRV:0,READ:0,PSY:0};
-    
+    var dims=['PRE','FLP','TRV','RVR','READ'];
+    var raw={PRE:0,FLP:0,TRV:0,RVR:0,READ:0};
+    var dimMax={PRE:0,FLP:0,TRV:0,RVR:0,READ:0};
     _qs.forEach(function(q){
-      var qMax={PRE:0,FLP:0,TRV:0,READ:0,PSY:0};
-      q._opts.forEach(function(opt){
-        Object.keys(opt.scores).forEach(function(d){
-          if(qMax[d]!==undefined) qMax[d]=Math.max(qMax[d],opt.scores[d]);
-        });
-      });
-      Object.keys(qMax).forEach(function(d){ dimMax[d]+=qMax[d]; });
+      var qMax={PRE:0,FLP:0,TRV:0,RVR:0,READ:0};
+      q._opts.forEach(function(opt){Object.keys(opt.scores).forEach(function(d){if(qMax[d]!==undefined)qMax[d]=Math.max(qMax[d],opt.scores[d]);});});
+      Object.keys(qMax).forEach(function(d){dimMax[d]+=qMax[d];});
     });
-    
     _qs.forEach(function(q){
-      var si=_ans[q.id];
-      if(si===undefined||si===null) return;
+      var si=_ans[q.id];if(si===undefined||si===null)return;
       var opt=q._opts[si];
-      Object.keys(opt.scores).forEach(function(d){
-        if(raw[d]!==undefined) raw[d]+=opt.scores[d];
-      });
+      Object.keys(opt.scores).forEach(function(d){if(raw[d]!==undefined)raw[d]+=opt.scores[d];});
     });
-    
     var sc={};
-    ['PRE','FLP','TRV','READ','PSY'].forEach(function(d){
-      if(!dimMax[d]){sc[d]=5;return;}
-      sc[d]=Math.round((raw[d]/dimMax[d])*10);
-    });
+    ['PRE','FLP','TRV','RVR','READ'].forEach(function(d){sc[d]=dimMax[d]?Math.round((raw[d]/dimMax[d])*10):5;});
     return sc;
   }
-  
-  function matchType(sc){
-    var P=sc.PRE,F=sc.FLP,T=sc.TRV,R=sc.READ,Ps=sc.PSY;
-    var avg=(P+F+T+R+Ps)/5;
-    if(Ps<=2&&P<=3&&F<=3&&T<=3) return 'TILTER';
-    if(P<=2&&F<=2&&T<=2&&R<=3&&Ps<=2) return 'FISH';
-    if(Ps<=2) return 'TILTER';
-    if(P<=3&&R>=6) return 'RAILER';
-    if(P<=3&&F<=3) return 'RAILER';
-    if(Ps>=8&&P>=7&&F>=7&&T>=7&&R>=7) return 'SHARK';
-    if(P>=7&&F>=7&&T>=7&&R>=7&&Ps>=7) return 'GTOER';
-    if(R>=8&&Ps>=7&&T>=7) return 'READER';
-    if(Ps>=8&&T>=6&&F<=6&&P>=5) return 'TRAPER';
-    if(P>=7&&Ps>=7&&T>=7&&avg>=7) return 'COACHER';
-    if(P>=7&&F<=5&&Ps>=6) return 'NIT';
-    if(R>=7&&Ps>=6&&T>=5) return 'READER';
-    if(F>=7&&T>=6&&Ps>=6&&avg<8) return 'TRAPER';
-    if(F<=3&&T<=3&&P>=4&&Ps>=4) return 'LOOSER';
-    if(P>=5&&F<=4&&Ps<=4) return 'BLUFFER';
-    if(T<=4&&F<=4&&Ps<=4) return 'RIVERK';
-    if(P>=4&&F<=4&&T<=4&&Ps<=3) return 'ATM';
-    if(P>=4&&F>=5&&T<=4&&Ps>=5) return 'SLOWY';
-    if(Ps<=4&&R<=4&&avg>=4) return 'CALLER';
-    if(avg>=5&&avg<7&&Ps>=4&&R>=5) return 'BADB';
-    if(avg>=5&&avg<7&&Ps<=4) return 'LUCKY';
-    if(P>=5&&T>=5&&Ps>=5&&avg>=5) return 'SHOVER';
-    if(F<=4&&T<=4) return 'LOOSER';
-    return 'FISH';
+  function getRank(t){
+    if(t>=44)return String.fromCodePoint(127942)+' 传奇级';
+    if(t>=38)return String.fromCodePoint(128142)+' 大师级';
+    if(t>=30)return String.fromCodePoint(129351)+' 进阶级';
+    if(t>=22)return String.fromCodePoint(129352)+' 普通级';
+    if(t>=14)return String.fromCodePoint(129353)+' 学徒级';
+    return String.fromCodePoint(128031)+' 提款机级';
   }
-  
+  function matchType(sc){
+    var P=sc.PRE,F=sc.FLP,T=sc.TRV,R=sc.RVR,Re=sc.READ,avg=(P+F+T+R+Re)/5;
+    if(avg>=8&&Re>=7)return 'SURGEON';if(avg>=7.5&&Re<7)return 'MACHINE';
+    if(Re>=8&&T>=7&&R>=7)return 'READER';if(T>=7&&R>=7&&F>=7&&Re>=6)return 'TRAPPER';
+    if(P>=7&&Re>=6&&avg>=6)return 'SNIPER';if(Re>=7&&P>=6&&F>=6)return 'BULLY';
+    if(R<=4&&T<=4&&avg>=4)return 'SHOVER';if(avg>=5&&avg<7&&Re>=5&&F>=5)return 'BLUFFER';
+    if(P>=7&&F<=5&&avg>=6)return 'NIT';if(P>=6&&F>=6&&T>=6&&R>=6&&Re<=5)return 'COACHER';
+    if(avg>=4&&avg<6&&Re>=4&&T>=4&&R>=4)return 'CALLER';
+    if(Re<=3&&P<=3&&avg<4)return 'FISH';if(Re<=3&&avg>=3&&avg<5)return 'TILTER';
+    if(Re<=4&&avg>=3&&avg<5)return 'LUCKY';if(R<=4&&Re<=4&&P>=4&&F>=4)return 'BADB';
+    if(avg>=4&&avg<6&&R>=4&&Re>=4)return 'SHOWOFF';return 'FISH';
+  }
   window.thtiSubmit=function(){
     var sc=calcScores();
     var tid=matchType(sc);
-    var types=JSON.parse(document.getElementById('thti-t-data').textContent);
-    var type=types.find(function(t){return t.id===tid;})||types[0];
-    var td=type.dims;
-    
+    var type=window._v6tdata.find(function(t){return t.id===tid;})||window._v6tdata[0];
+    var theme=window._typeThemes[tid]||{bg:'linear-gradient(160deg,#1a1208,#2a2010)',badge:'#d4a017',badgeBg:'rgba(212,160,23,.1)',badgeBorder:'rgba(212,160,23,.3)'};
+    var svgArt=window._svgArt[tid]||'';
+    var totalScore=sc.PRE+sc.FLP+sc.TRV+sc.RVR+sc.READ;
+    var ms=type.maxScores||{PRE:7,FLP:7,TRV:7,RVR:7,READ:7};
+    var diff=Object.keys(ms).reduce(function(s,d){return s+Math.abs((ms[d]||5)-sc[d]);},0);
+    var mp=Math.max(56,Math.round(100-diff*4));
     document.getElementById('screen-quiz').style.display='none';
     document.getElementById('screen-result').style.display='block';
-    document.getElementById('r-emoji').textContent=type.emoji;
-    document.getElementById('r-name').textContent=type.name;
-    document.getElementById('r-code').textContent=type.code;
-    
-    var diff=['PRE','FLP','TRV','READ','PSY'].reduce(function(s,d){return s+Math.abs((td[d]||5)-sc[d]);},0);
-    var mp=Math.max(60,Math.round(100-diff*3));
-    document.getElementById('r-match').textContent='匹配度 '+mp+'%';
-    
-    var dLabels={PRE:'翻前判断',FLP:'Flop应对',TRV:'Turn/River',READ:'读人能力',PSY:'心理素质'};
-    var dColors={PRE:'#d4a017',FLP:'#e0742a',TRV:'#c0392b',READ:'#2ecc71',PSY:'#3498db'};
-    
+    var cardHTML='<div class="char-card" style="background:none">'
+      +'<div class="char-card-bg" style="background:'+theme.bg+'"></div>'
+      +'<div class="char-card-content">'
+      +'<div class="char-art-area"><div class="char-figure">'+svgArt+'</div></div>'
+      +'<div class="char-info">'
+      +'<div class="char-group-badge" style="color:'+theme.badge+';background:'+theme.badgeBg+';border-color:'+theme.badgeBorder+'">'+type.group+'</div>'
+      +'<div class="char-name">'+type.name+'</div>'
+      +'<div class="char-code" style="color:'+theme.badge+'">'+type.code+'</div>'
+      +'<div class="char-tagline">'+type.tagline+'</div>'
+      +'<div class="total-score-wrap" style="border:1px solid '+theme.badgeBorder+'">'
+      +'<div class="total-score-label" style="color:'+theme.badge+'">牌桌综合实力</div>'
+      +'<div class="total-score-val" style="color:'+theme.badge+'">'+totalScore+'<span class="total-score-max">/50</span></div>'
+      +'<div class="total-score-rank">'+getRank(totalScore)+'</div>'
+      +'</div>'
+      +'<div class="match-section">'
+      +'<div class="match-row"><span>人格匹配度</span><span style="color:'+theme.badge+'">'+mp+'%</span></div>'
+      +'<div class="match-bar-wrap"><div class="match-bar-fill" id="r-match-bar" style="width:'+mp+'%;background:'+theme.badge+'"></div></div>'
+      +'</div></div></div></div>';
+    document.getElementById('char-card-wrap').innerHTML=cardHTML;
+    var dLabels={PRE:'翻前判断',FLP:'Flop应对',TRV:'Turn打法',RVR:'River决策',READ:'读人能力'};
+    var dColors={PRE:'#d4a017',FLP:'#e0742a',TRV:'#c0392b',RVR:'#8e44ad',READ:'#2ecc71'};
     var sh='';
-    ['PRE','FLP','TRV','READ','PSY'].forEach(function(d){
-      var v=sc[d];
-      sh+='<div class="score-row"><div class="score-label">'+dLabels[d]+'</div><div class="score-bar-wrap"><div class="score-bar-fill" style="width:'+v*10+'%;background:'+dColors[d]+'"></div></div><div class="score-val">'+v+'/10</div></div>';
+    ['PRE','FLP','TRV','RVR','READ'].forEach(function(d){
+      sh+='<div class="score-row"><div class="score-label">'+dLabels[d]+'</div>'
+        +'<div class="score-bar-wrap"><div class="score-bar-fill" style="width:'+sc[d]*10+'%;background:'+dColors[d]+'"></div></div>'
+        +'<div class="score-val">'+sc[d]+'/10</div></div>';
     });
     document.getElementById('score-rows').innerHTML=sh;
-    document.getElementById('r-funny').textContent=type.funny;
-    document.getElementById('r-desc').textContent=type.desc;
+    document.getElementById('share-score-number').textContent=totalScore;
+    document.getElementById('share-score-rank').textContent=getRank(totalScore)+' · '+type.name+' · 满分50分，快让朋友也来比比！';
+    document.getElementById('r-friend-callout').textContent='快去找 '+window._names.fish+' 也来测一测！你猜他会是什么类型？（大概率是行走的提款机 🐟）  让 '+window._names.pro+' 来挑战一下——看他能不能测出手术刀。';
+    document.getElementById('r-funny').textContent=rn(type.funny);
+    document.getElementById('r-desc').textContent=rn(type.desc);
     window.scrollTo(0,0);
   };
-  
-  // Show intro screen first
-  window.thtiStart=function(){
+  window.thtiOpenNames=function(){
     document.getElementById('screen-home').style.display='none';
+    document.getElementById('screen-names').style.display='flex';
+    window.scrollTo(0,0);
+  };
+  window.thtiSubmitNames=function(){
+    var p=document.getElementById('inp-pro').value.trim();
+    var f=document.getElementById('inp-fish').value.trim();
+    var m=document.getElementById('inp-mid').value.trim();
+    window._names={pro:p||'Tom',fish:f||'Judy',mid:m||'Jack'};
+    document.getElementById('intro-name-pro').textContent=window._names.pro;
+    document.getElementById('intro-name-fish').textContent=window._names.fish;
+    document.getElementById('intro-name-mid').textContent=window._names.mid;
+    document.getElementById('screen-names').style.display='none';
     document.getElementById('screen-intro').style.display='flex';
     window.scrollTo(0,0);
   };
-  
-  // Deal cards - start actual quiz
+  window.thtiSkipNames=function(){
+    window._names={pro:'Tom',fish:'Judy',mid:'Jack'};
+    document.getElementById('screen-names').style.display='none';
+    document.getElementById('screen-intro').style.display='flex';
+    window.scrollTo(0,0);
+  };
   window.thtiDeal=function(){
-    _qs=getAllQ();_cur=0;_ans={};
+    _qs=getAllQ();_cur=0;_ans={};_lastDim='';
+    window._currentQs=_qs;window._currentAns=_ans;
     document.getElementById('screen-intro').style.display='none';
     document.getElementById('screen-quiz').style.display='block';
     window.scrollTo(0,0);
     renderQ();
   };
-  
   window.thtiRetry=function(){
     document.getElementById('screen-result').style.display='none';
     document.getElementById('screen-home').style.display='flex';
     window.scrollTo(0,0);
   };
-})();
-</script>
-</body>
-</html>
+})();</script></body></html>
