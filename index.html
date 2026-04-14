@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>THTI 德州扑克人格测试</title>
+<style>*{box-sizing:border-box;margin:0;padding:0}
+body{background:#1a1208;color:#e8d5a3;font-family:'Georgia',serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:20px}
+.suit{color:#d4a017;font-size:1.1em}.suit.red{color:#c0392b}
+#screen-home{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:90vh;text-align:center;max-width:600px}
+.home-suits{font-size:2.5rem;letter-spacing:8px;margin-bottom:20px}
+.home-title{font-size:2.8rem;font-weight:bold;color:#d4a017;letter-spacing:4px;margin-bottom:8px}
+.home-sub{font-size:1.1rem;color:#b8942e;margin-bottom:24px;letter-spacing:2px}
+.home-tagline{font-size:1rem;color:#c8b87a;line-height:1.8;margin-bottom:40px;padding:0 20px}
+.btn-start{background:linear-gradient(135deg,#d4a017,#8b6914);color:#1a1208;border:none;padding:16px 48px;font-size:1.2rem;font-weight:bold;border-radius:4px;cursor:pointer;letter-spacing:3px;transition:all .3s}
+.btn-start:hover{background:linear-gradient(135deg,#f0c040,#a07820);transform:translateY(-2px);box-shadow:0 6px 20px rgba(212,160,23,.4)}
+#screen-quiz{display:none;width:100%;max-width:720px}
+.progress-wrap{background:#2a1f08;border-radius:8px;height:8px;margin-bottom:24px;overflow:hidden}
+.progress-bar{height:100%;background:linear-gradient(90deg,#d4a017,#f0c040);border-radius:8px;transition:width .4s}
+.progress-text{color:#b8942e;font-size:.85rem;text-align:right;margin-bottom:6px}
+.q-card{background:linear-gradient(160deg,#2a1e0a,#1f1506);border:1px solid #3a2c10;border-radius:12px;padding:28px;margin-bottom:24px}
+.q-tag{display:inline-block;background:#3a2c10;color:#d4a017;font-size:.75rem;padding:3px 10px;border-radius:3px;margin-bottom:14px;letter-spacing:1px}
+.q-context{background:#1a1208;border-left:3px solid #d4a017;padding:14px 16px;border-radius:0 6px 6px 0;margin-bottom:16px;font-size:.92rem;line-height:1.7;color:#e0cc90}
+.q-context .cards{font-size:1.1rem;letter-spacing:2px;color:#f0e0a0}
+.q-ask{font-size:1rem;color:#e8d5a3;margin-bottom:16px;font-weight:bold}
+.options{display:flex;flex-direction:column;gap:10px}
+.opt-btn{background:#241a06;border:1px solid #3a2c10;color:#c8b87a;padding:13px 18px;border-radius:6px;cursor:pointer;text-align:left;font-size:.93rem;transition:all .2s;line-height:1.5}
+.opt-btn:hover{border-color:#d4a017;background:#2e2208;color:#e8d5a3}
+.opt-btn.selected{border-color:#d4a017;background:linear-gradient(135deg,#3a2c10,#2a1e08);color:#f0e0a0;font-weight:bold}
+.opt-btn .opt-tag{display:inline-block;background:#d4a017;color:#1a1208;font-size:.7rem;padding:2px 7px;border-radius:2px;margin-right:8px;font-weight:bold;letter-spacing:.5px}
+.opt-btn .opt-tag.fold{background:#8b2020}.opt-btn .opt-tag.call{background:#1a5c2a}.opt-btn .opt-tag.raise{background:#8b6914}.opt-btn .opt-tag.check{background:#2a4a6a}.opt-btn .opt-tag.allin{background:#6a0a0a}
+.quiz-nav{display:flex;justify-content:space-between;align-items:center;margin-top:8px}
+.btn-nav{background:transparent;border:1px solid #3a2c10;color:#b8942e;padding:10px 24px;border-radius:4px;cursor:pointer;font-size:.9rem;transition:all .2s}
+.btn-nav:hover{border-color:#d4a017;color:#d4a017}
+.btn-nav:disabled{opacity:.3;cursor:default}
+.btn-submit{background:linear-gradient(135deg,#d4a017,#8b6914);color:#1a1208;border:none;padding:12px 36px;border-radius:4px;cursor:pointer;font-size:1rem;font-weight:bold;display:none;letter-spacing:2px;transition:all .3s}
+.btn-submit:hover{background:linear-gradient(135deg,#f0c040,#a07820);transform:translateY(-1px)}
+.btn-submit.visible{display:block}
+#screen-result{display:none;width:100%;max-width:680px;padding-bottom:40px}
+.result-header{text-align:center;padding:40px 20px 24px}
+.result-emoji{font-size:4rem;margin-bottom:16px}
+.result-type-cn{font-size:2.4rem;font-weight:bold;color:#d4a017;margin-bottom:4px}
+.result-type-code{font-size:1.1rem;color:#b8942e;letter-spacing:3px;margin-bottom:8px}
+.result-match{font-size:.95rem;color:#a08040;margin-bottom:20px}
+.score-board{background:linear-gradient(160deg,#2a1e0a,#1f1506);border:1px solid #3a2c10;border-radius:12px;padding:24px;margin-bottom:20px}
+.score-title{color:#d4a017;font-size:1rem;font-weight:bold;letter-spacing:2px;margin-bottom:20px;text-align:center}
+.score-row{display:flex;align-items:center;margin-bottom:14px;gap:12px}
+.score-label{color:#c8b87a;font-size:.85rem;width:110px;flex-shrink:0}
+.score-bar-wrap{flex:1;background:#1a1208;border-radius:4px;height:10px;overflow:hidden}
+.score-bar-fill{height:100%;border-radius:4px;transition:width 1s ease}
+.score-val{color:#d4a017;font-weight:bold;font-size:.9rem;width:36px;text-align:right;flex-shrink:0}
+.type-box{background:linear-gradient(160deg,#2a1e0a,#1f1506);border:1px solid #3a2c10;border-radius:12px;padding:24px;margin-bottom:20px}
+.type-funny{color:#c0392b;font-size:1.05rem;font-style:italic;margin-bottom:14px;line-height:1.7}
+.type-desc{color:#c8b87a;font-size:.93rem;line-height:1.8}
+.dim-box{background:linear-gradient(160deg,#2a1e0a,#1f1506);border:1px solid #3a2c10;border-radius:12px;padding:24px;margin-bottom:20px}
+.dim-title{color:#d4a017;font-size:.95rem;font-weight:bold;letter-spacing:2px;margin-bottom:16px}
+.dim-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;font-size:.88rem}
+.dim-name{color:#b8942e;width:130px}
+.dim-bar-wrap{flex:1;background:#1a1208;border-radius:3px;height:8px;margin:0 12px;overflow:hidden}
+.dim-bar-fill{height:100%;border-radius:3px}
+.dim-score{color:#d4a017;font-weight:bold;font-size:.9rem;width:40px;text-align:right}
+.note-box{background:#1f1506;border:1px solid #2a1e0a;border-radius:8px;padding:16px 20px;margin-bottom:20px;font-size:.82rem;color:#8a7050;line-height:1.7;text-align:center}
+.author-box{text-align:center;padding:20px;color:#5a4820;font-size:.8rem;line-height:1.8}
+.btn-retry{background:transparent;border:1px solid #d4a017;color:#d4a017;padding:12px 36px;border-radius:4px;cursor:pointer;font-size:.95rem;margin-top:16px;letter-spacing:2px;transition:all .2s;display:block;margin-left:auto;margin-right:auto}
+.btn-retry:hover{background:#d4a017;color:#1a1208}
+#screen-intro{display:none;flex-direction:column;align-items:center;justify-content:center;min-height:90vh;text-align:center;max-width:580px;padding:0 24px}
+.intro-suits{font-size:1.8rem;letter-spacing:12px;margin-bottom:32px;opacity:.5}
+.intro-body{font-size:1.05rem;color:#c8b87a;line-height:2;margin-bottom:16px}
+.intro-body em{color:#d4a017;font-style:normal;font-weight:bold}
+.intro-body .punchline{color:#e8d5a3;font-size:1.15rem;display:block;margin-top:12px}
+.intro-chips{font-size:2rem;margin:28px 0;letter-spacing:6px;animation:chipFloat 3s ease-in-out infinite}
+@keyframes chipFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.intro-warn{font-size:.82rem;color:#6a5030;margin-bottom:32px;line-height:1.7;border-top:1px solid #2a1e0a;padding-top:16px}
+.btn-deal{background:linear-gradient(135deg,#d4a017,#8b6914);color:#1a1208;border:none;padding:16px 52px;font-size:1.15rem;font-weight:bold;border-radius:4px;cursor:pointer;letter-spacing:3px;transition:all .3s}
+.btn-deal:hover{background:linear-gradient(135deg,#f0c040,#a07820);transform:translateY(-2px);box-shadow:0 6px 20px rgba(212,160,23,.4)}
+/* Lock answered options */
+.opt-btn.selected.locked{cursor:default;pointer-events:none}
+.opt-btn.locked{opacity:.35;cursor:default;pointer-events:none}
+.opt-btn.selected.locked{opacity:1}
+/* Hide nav entirely */
+.quiz-nav.no-nav{display:none}
+</style>
+</head>
+<body>
+
+<!-- Screen 0: Home -->
+<div id="screen-home">
+  <div class="home-suits">&#9824; <span class="red">&#9829;</span> <span class="red">&#9830;</span> &#9827;</div>
+  <div class="home-title">T H T I</div>
+  <div class="home-sub">Texas Hold'em Type Indicator</div>
+  <div class="home-tagline">
+    你在牌桌上是鲨鱼，还是提款机？<br>
+    是GTO信徒，还是脸帝本帝？<br><br>
+    30道真实牌局场景题，没有正确答案——<br>
+    只有最真实的你。<br><br>
+    <em style="color:#8a7050;font-size:.9rem">本测试不构成任何赌博建议。赢了别谢我，输了也别怪我。</em>
+  </div>
+  <button class="btn-start" onclick="thtiStart()">开始测试 &#9824;</button>
+</div>
+
+<!-- Screen 1: Intro / Atmosphere -->
+<div id="screen-intro">
+  <div class="intro-suits">&#9824; &#9829; &#9830; &#9827;</div>
+  <div class="intro-body">
+    想象一下，这是你最熟悉的牌桌——<br>
+    那个你知道哪张椅子最软、哪个位置出风口的牌桌。<br><br>
+    <em>带上你惯用的底池控制策略，</em><br>
+    <em>和那套"我只是玩玩而已"的借口，</em><br><br>
+    这是30手牌。没有冷静期，没有撤单，<br>
+    每一道题都是一次真实的决定。<br><br>
+    <span class="punchline">也许是测试，也许是照镜子——<br>反正你牌桌上什么样，这里就什么样。</span>
+  </div>
+  <div class="intro-chips">&#127920; &#127025; &#127920;</div>
+  <div class="intro-warn">
+    &#9824; 选完即锁定，无法返回上一题<br>
+    毕竟丢出去的筹码，拿不回来
+  </div>
+  <button class="btn-deal" onclick="thtiDeal()">发牌 — 开始 &#9824;</button>
+</div>
+
+<!-- Screen 2: Quiz -->
+<div id="screen-quiz">
+  <div class="progress-text" id="prog-text">0 / 30</div>
+  <div class="progress-wrap"><div class="progress-bar" id="prog-bar" style="width:0%"></div></div>
+  <div id="q-area"></div>
+  <div class="quiz-nav">
+    <span></span>
+    <button class="btn-submit" id="btn-submit" onclick="thtiSubmit()">摊牌 — 查看结果 &#9824;</button>
+  </div>
+</div>
+
+<!-- Screen 3: Result -->
+<div id="screen-result">
+  <div class="result-header">
+    <div class="result-emoji" id="r-emoji"></div>
+    <div class="result-type-cn" id="r-name"></div>
+    <div class="result-type-code" id="r-code"></div>
+    <div class="result-match" id="r-match"></div>
+  </div>
+  <div class="score-board">
+    <div class="score-title">&#9658; 你的实战五维评分</div>
+    <div id="score-rows"></div>
+  </div>
+  <div class="type-box">
+    <div class="type-funny" id="r-funny"></div>
+    <div class="type-desc" id="r-desc"></div>
+  </div>
+  <div class="note-box">
+    &#9824; 本测试结果纯属娱乐，如有雷同，纯属你牌打得太可预测 &#9824;<br>
+    科学研究表明：看完测试结果后立刻去打牌的人，胜率提升0%
+  </div>
+  <div class="author-box">
+    THTI v4.1 · Texas Hold'em Type Indicator<br>
+    基于德州扑克实战场景的人格分析系统<br>
+    &#9824; &#9829; &#9830; &#9827;
+  </div>
+  <button class="btn-retry" onclick="thtiRetry()">重新测试</button>
+</div>
+
+<script type="application/json" id="thti-q-data">[{"id":"pre1","dim":"PRE","tag":"翻前 · UTG位","ctx":"9人桌，$1/$2 现金局。你在UTG位，手牌 <span class=\"cards\">A♠ J♦</span>。所有人都有$200左右筹码。你左边是一个刚坐下20分钟的玩家，已经连续3次翻前弃牌。","ask":"轮到你，你怎么做？","opts":[{"tag":"FOLD","cls":"fold","txt":"弃牌。AJ在UTG没优势，等更好的牌。","scores":{"PRE":1,"PSY":3}},{"tag":"RAISE","cls":"raise","txt":"加注到$6（3BB），标准开牌范围。","scores":{"PRE":3,"PSY":3}},{"tag":"RAISE","cls":"raise","txt":"加注到$10（5BB），打紧玩家，多开几个底池。","scores":{"PRE":2,"PSY":2}},{"tag":"LIMP","cls":"call","txt":"跟注$2进底池，见机行事。","scores":{"PRE":1,"PSY":1}}]},{"id":"pre2","dim":"PRE","tag":"翻前 · BTN位","ctx":"6人桌，$2/$5现金局。你在BTN，手牌 <span class=\"cards\">7♣ 6♣</span>。CO（松凶型玩家，这局已经赢了三个底池）raise到$20，其他人folded。底池$27。你有$600，对手有$450。","ask":"你怎么应对？","opts":[{"tag":"FOLD","cls":"fold","txt":"弃牌。投机牌vs松凶，太危险了。","scores":{"PRE":2,"PSY":2}},{"tag":"CALL","cls":"call","txt":"跟注$20，在位优势+有隐含赔率。","scores":{"PRE":3,"PSY":3}},{"tag":"3BET","cls":"raise","txt":"3-bet到$65，代表强牌施压。","scores":{"PRE":3,"FLP":3,"PSY":2}},{"tag":"ALL-IN","cls":"allin","txt":"直接推all-in $450，看他敢不敢接。","scores":{"PRE":1,"PSY":1}}]},{"id":"pre3","dim":"PRE","tag":"翻前 · BB位","ctx":"锦标赛，200人，你现在是泡沫（bubble）前5人。你在BB，筹码$8000（16BB）。BTN是一个紧弱型玩家，raise all-in $8000。SB已弃牌。你的手牌是 <span class=\"cards\">Q♠ 9♣</span>。","ask":"你怎么做？","opts":[{"tag":"FOLD","cls":"fold","txt":"弃牌。Q9太弱，等泡沫过了再说。","scores":{"PRE":3,"PSY":3}},{"tag":"CALL","cls":"call","txt":"跟注。紧弱玩家push范围窄，Q9有机会。","scores":{"PRE":2,"PSY":2}},{"tag":"CALL","cls":"call","txt":"跟注。不管什么牌，反正要靠脸，叫！","scores":{"PRE":1,"PSY":1}},{"tag":"FOLD","cls":"fold","txt":"弃牌，但是嘴上骂他运气好。","scores":{"PRE":1,"PSY":1}}]},{"id":"pre4","dim":"PRE","tag":"翻前 · SB位","ctx":"$1/$2 线上9人桌。你在SB，手牌 <span class=\"cards\">K♦ K♥</span>。UTG加注到$8，MP跟注，CO跟注，BTN跟注。底池$33，轮到你。","ask":"四个人进了底池，你怎么打KK？","opts":[{"tag":"RAISE","cls":"raise","txt":"3-bet到$42，驱逐杂鱼，保护手牌。","scores":{"PRE":3,"PSY":3}},{"tag":"RAISE","cls":"raise","txt":"3-bet到$60，打大一点，反正KK超强。","scores":{"PRE":2,"PSY":2}},{"tag":"CALL","cls":"call","txt":"跟注，隐藏手牌慢玩，等翻牌再打。","scores":{"PRE":2,"FLP":1,"PSY":2}},{"tag":"ALL-IN","cls":"allin","txt":"直接all-in $200！KK就是要堆筹码！","scores":{"PRE":1,"PSY":2}}]},{"id":"pre5","dim":"PRE","tag":"翻前 · HJ位","ctx":"$5/$10 现金局，6人桌。你在HJ，手牌 <span class=\"cards\">A♦ K♣</span>。你左边的CO玩家刚刚输了一个大底池（对方连河打出同花），正在叹气刷手机，明显状态不佳。","ask":"你怎么打AKo？","opts":[{"tag":"RAISE","cls":"raise","txt":"正常加注到$30（3BB），标准操作。","scores":{"PRE":3,"READ":2}},{"tag":"RAISE","cls":"raise","txt":"加注到$40，针对性压迫情绪不稳的对手。","scores":{"PRE":3,"READ":3}},{"tag":"LIMP","cls":"call","txt":"Limp进来，等对方先动作。","scores":{"PRE":1,"READ":1}},{"tag":"FOLD","cls":"fold","txt":"AK是\"Anna Kournikova\"，看着好看赢不了，弃牌。","scores":{"PRE":1,"PSY":1}}]},{"id":"pre6","dim":"PRE","tag":"翻前 · BTN位","ctx":"锦标赛决赛桌，9人，你是筹码第二多的玩家。短码玩家（2BB）在UTG推all-in。轮转到你（BTN），手牌 <span class=\"cards\">5♦ 4♦</span>。有两个大码玩家在你后面还没行动。","ask":"你怎么处理？","opts":[{"tag":"FOLD","cls":"fold","txt":"弃牌。54s太弱，风险不值得。","scores":{"PRE":3,"PSY":3}},{"tag":"CALL","cls":"call","txt":"跟注。赔率够，有机会干掉短码。","scores":{"PRE":2,"PSY":2}},{"tag":"RAISE","cls":"raise","txt":"超额加注isolate，防止后手参与。","scores":{"PRE":3,"READ":3}},{"tag":"ALL-IN","cls":"allin","txt":"直接all-in，挤压后面的玩家全弃牌。","scores":{"PRE":2,"PSY":1}}]},{"id":"pre7","dim":"PRE","tag":"翻前 · 4-bet场景","ctx":"$2/$5 现金局，你在CO，手牌 <span class=\"cards\">A♠ Q♠</span>。BTN是一个紧实的玩家（VPIP约18%），你开牌到$15，BTN 3-bet到$45，其他人已弃牌。底池$52，轮到你。","ask":"面对紧玩家的3-bet，你怎么应对AQs？","opts":[{"tag":"FOLD","cls":"fold","txt":"弃牌。AQ面对紧玩家的3-bet是dominated的概率很高。","scores":{"PRE":3,"READ":3}},{"tag":"CALL","cls":"call","txt":"跟注，位置在后，看牌再说。","scores":{"PRE":2,"READ":2}},{"tag":"4BET","cls":"raise","txt":"4-bet到$120，代表AK/AA施压。","scores":{"PRE":2,"PSY":2}},{"tag":"ALL-IN","cls":"allin","txt":"4-bet all-in $500，我就是要赌一把！","scores":{"PRE":1,"PSY":1}}]},{"id":"pre8","dim":"PRE","tag":"翻前 · 小口袋对","ctx":"9人桌，$1/$2，你在MP，手牌 <span class=\"cards\">4♣ 4♦</span>。UTG（紧实型，从不虚诈）raise到$8。其他人fold到你。双方筹码均为$200。","ask":"面对紧实玩家的开牌，小对子怎么打？","opts":[{"tag":"FOLD","cls":"fold","txt":"弃牌。小对子面对紧玩家，很可能有大对子在等你。","scores":{"PRE":2,"PSY":2}},{"tag":"CALL","cls":"call","txt":"跟注$8，寻求set赔率（implied odds够）。","scores":{"PRE":3,"READ":2}},{"tag":"CALL","cls":"call","txt":"跟注，反正44已经赢了，等牌面就好。","scores":{"PRE":1,"PSY":1}},{"tag":"RAISE","cls":"raise","txt":"3-bet到$28，44完全可以3-bet为价值。","scores":{"PRE":1,"FLP":2}}]},{"id":"flp1","dim":"FLP","tag":"Flop · C-bet决策","ctx":"$2/$5，你在BTN，手牌 <span class=\"cards\">A♠ K♣</span>。翻前你raise到$15，BB跟注。翻牌 <span class=\"cards\">J♦ 7♥ 2♣</span>（彩虹）。BB check。底池$31，你有$480，对手$460。","ask":"你完全没打中，怎么办？","opts":[{"tag":"CHECK","cls":"check","txt":"Check back。没打中就不打，免得被反扑。","scores":{"FLP":2,"PSY":3}},{"tag":"BET","cls":"raise","txt":"bet $15（约1/2底池），标准continuation bet。","scores":{"FLP":3,"PSY":3}},{"tag":"BET","cls":"raise","txt":"bet $30（全底池），大注施压让他弃牌。","scores":{"FLP":2,"PSY":2}},{"tag":"BET","cls":"raise","txt":"bet $80，这么大的注他肯定弃！","scores":{"FLP":1,"PSY":1}}]},{"id":"flp2","dim":"FLP","tag":"Flop · 面对donk bet","ctx":"$1/$3，你在CO用 <span class=\"cards\">9♠ 9♦</span> 开牌到$12，BTN弃牌，BB（松凶型，刚刚叫了一个奇怪的底池）跟注。翻牌 <span class=\"cards\">K♦ 9♥ 3♣</span>。BB直接下注$25（bottom pair?还是慢玩K?）。底池$25，你有$400。","ask":"你中了set！BB先donk bet，你怎么应对？","opts":[{"tag":"CALL","cls":"call","txt":"跟注，慢玩set，等后街加大。","scores":{"FLP":2,"TRV":3}},{"tag":"RAISE","cls":"raise","txt":"raise到$75，value bet，开始堆筹码。","scores":{"FLP":3,"TRV":3}},{"tag":"RAISE","cls":"raise","txt":"raise到$200，直接对准他的全部筹码。","scores":{"FLP":3,"PSY":2}},{"tag":"FOLD","cls":"fold","txt":"也许他有K？谨慎弃牌。","scores":{"FLP":1,"PSY":1}}]},{"id":"flp3","dim":"FLP","tag":"Flop · 抽牌处理","ctx":"6人桌，$5/$10。你在BB，手牌 <span class=\"cards\">Q♦ T♦</span>。BTN raise到$30，你跟注。翻牌 <span class=\"cards\">J♦ 9♣ 2♦</span>，你有双面顺子+同花抽牌（大约15个outs！）。BTN c-bet $40。底池$65，你有$800。","ask":"面对c-bet，你有超强抽牌，怎么打？","opts":[{"tag":"CALL","cls":"call","txt":"跟注，被动抽牌，看turn再行动。","scores":{"FLP":2,"TRV":2}},{"tag":"RAISE","cls":"raise","txt":"raise to $120，半诈唬+保护抽牌。","scores":{"FLP":3,"TRV":3}},{"tag":"RAISE","cls":"raise","txt":"raise all-in $800，15个outs直接全下！","scores":{"FLP":2,"PSY":1}},{"tag":"FOLD","cls":"fold","txt":"没成牌就弃牌，不做梦了。","scores":{"FLP":1,"PSY":2}}]},{"id":"flp4","dim":"FLP","tag":"Flop · 读牌面纹理","ctx":"$2/$5，9人桌。你在HJ手牌 <span class=\"cards\">A♠ A♦</span>，3-bet到$45后只有SB跟注（该玩家人称\"橡皮筋\"，极少弃牌，靠运气win率颇高）。翻牌 <span class=\"cards\">K♣ Q♦ J♣</span>。SB check。底池$92。","ask":"AA面对KQJ翻牌面，你怎么应对？","opts":[{"tag":"CHECK","cls":"check","txt":"Check back，这个牌面AA很危险，控制底池。","scores":{"FLP":3,"READ":3}},{"tag":"BET","cls":"raise","txt":"小额bet $30，blocking bet试探他反应。","scores":{"FLP":3,"READ":3}},{"tag":"BET","cls":"raise","txt":"bet $70（3/4底池），继续价值下注。","scores":{"FLP":2,"READ":2}},{"tag":"BET","cls":"raise","txt":"bet全底池$92，AA就要发挥价值！","scores":{"FLP":1,"READ":1}}]},{"id":"flp5","dim":"FLP","tag":"Flop · 面对re-raise","ctx":"$1/$2线上桌。你在BTN手牌 <span class=\"cards\">J♣ T♣</span>，跟注到翻牌 <span class=\"cards\">9♦ 8♣ 2♠</span>，你有双面顺子抽牌。你c-bet $8，对手（第一次在这里见到，统计显示3-bet flop频率很低）raise到$28。底池$28，你有$180。","ask":"你面对一个raise，你的手牌实际上是强半诈唬，怎么办？","opts":[{"tag":"FOLD","cls":"fold","txt":"弃牌。没成牌，被raise只能走人。","scores":{"FLP":1,"PSY":2}},{"tag":"CALL","cls":"call","txt":"跟注$20，继续看牌，位置在后。","scores":{"FLP":3,"TRV":2}},{"tag":"RAISE","cls":"raise","txt":"3-bet all-in，半诈唬+顺子抽牌，最大化EV。","scores":{"FLP":3,"TRV":3}},{"tag":"RAISE","cls":"raise","txt":"加到$80，看他怎么反应再决定。","scores":{"FLP":2,"READ":2}}]},{"id":"flp6","dim":"FLP","tag":"Flop · 多人底池","ctx":"$1/$2，5人进入翻牌，你在SB手牌 <span class=\"cards\">5♥ 5♠</span>。翻牌 <span class=\"cards\">5♦ K♣ Q♥</span>，你中了set！轮到你先行动。底池$18（5人底池）。","ask":"多人底池中你中了暗三条，先行动怎么做？","opts":[{"tag":"CHECK","cls":"check","txt":"Check，慢玩set，让别人来bet。","scores":{"FLP":2,"TRV":3}},{"tag":"BET","cls":"raise","txt":"小额bet $8，引诱跟注，开始建底池。","scores":{"FLP":3,"TRV":3}},{"tag":"BET","cls":"raise","txt":"bet $18（底池额），清牌面，多人时保护set。","scores":{"FLP":3,"PSY":3}},{"tag":"BET","cls":"raise","txt":"bet $50，把所有人赶走然后赢$18。","scores":{"FLP":1,"PSY":1}}]},{"id":"flp7","dim":"FLP","tag":"Flop · OOP弃牌判断","ctx":"$5/$10，你在BB手牌 <span class=\"cards\">A♣ 7♣</span>，call了BTN的$30加注。翻牌 <span class=\"cards\">K♠ J♦ T♥</span>，你完全未中，且牌面对BTN的范围很有利。你check，BTN bet $50（底池$63）。","ask":"牌面不利，完全miss，怎么办？","opts":[{"tag":"FOLD","cls":"fold","txt":"弃牌。完全miss + 位置不利，这手牌结束了。","scores":{"FLP":3,"PSY":3}},{"tag":"CALL","cls":"call","txt":"跟注，Ace backdoor抽牌还有点价值。","scores":{"FLP":2,"TRV":2}},{"tag":"RAISE","cls":"raise","txt":"check-raise到$140，半诈唬！","scores":{"FLP":2,"PSY":2}},{"tag":"FOLD","cls":"fold","txt":"弃牌，然后打开手机查\"A7s翻牌策略\"。","scores":{"FLP":2,"PSY":1}}]},{"id":"trv1","dim":"TRV","tag":"Turn · 价值还是控制","ctx":"$2/$5，你在BTN手牌 <span class=\"cards\">K♥ Q♥</span>。翻牌 <span class=\"cards\">K♦ 7♣ 2♠</span> 你bet，被跟注。Turn <span class=\"cards\">J♠</span>。对手（松鱼型，喜欢跟注各种东西）check。底池$80，你有$380。","ask":"Turn出了J，你顶对顶踢脚，怎么打？","opts":[{"tag":"CHECK","cls":"check","txt":"Check back，J让牌面变复杂了，控制底池。","scores":{"TRV":3,"READ":3}},{"tag":"BET","cls":"raise","txt":"bet $40（1/2底池），继续价值下注。","scores":{"TRV":3,"READ":2}},{"tag":"BET","cls":"raise","txt":"bet $80（底池额），大价值，他跟注范围很广。","scores":{"TRV":2,"READ":2}},{"tag":"BET","cls":"raise","txt":"bet $200，反正他什么都跟，直接all-in附近。","scores":{"TRV":1,"PSY":1}}]},{"id":"trv2","dim":"TRV","tag":"Turn · 诈唬timing","ctx":"$1/$2，你在CO手牌 <span class=\"cards\">A♦ 4♦</span>。翻牌 <span class=\"cards\">Q♠ 8♣ 3♦</span> 你c-bet被跟注（对手是个紧实型，很少call无成牌）。Turn <span class=\"cards\">K♣</span>。对手check。底池$42，你有$160。","ask":"Turn出K，你仍然nothing，紧实型对手check，继续诈唬吗？","opts":[{"tag":"CHECK","cls":"check","txt":"Check back，不想扩大底池，看river怎么变。","scores":{"TRV":2,"PSY":3}},{"tag":"BET","cls":"raise","txt":"bet $28（2/3底池），代表AK/KK继续施压。","scores":{"TRV":3,"PSY":3}},{"tag":"BET","cls":"raise","txt":"bet $80，大注让紧玩家弃牌QQ以下。","scores":{"TRV":2,"PSY":2}},{"tag":"BET","cls":"raise","txt":"all-in $160，不诈唬到底不是真诈唬！","scores":{"TRV":1,"PSY":1}}]},{"id":"trv3","dim":"TRV","tag":"River · 终极决策","ctx":"$5/$10，你在SB手牌 <span class=\"cards\">A♠ Q♦</span>。牌面 <span class=\"cards\">A♥ 8♣ 3♦ 2♣ 7♠</span>（全五街看完）。你一直在bet，到河牌你bet $120，对手（读牌大师型，不轻易call也不轻易弃牌）raise all-in $480。底池$760，你需要call $360。","ask":"面对河牌raise，你的顶对顶踢脚，怎么做？","opts":[{"tag":"FOLD","cls":"fold","txt":"弃牌。河牌raise几乎都是强牌，A-Q难以打败。","scores":{"TRV":3,"READ":3}},{"tag":"CALL","cls":"call","txt":"跟注。赔率够，而且对手可能是诈唬。","scores":{"TRV":2,"READ":2}},{"tag":"CALL","cls":"call","txt":"跟注，反正我已经bet了这么多，弃牌不甘心。","scores":{"TRV":1,"PSY":1}},{"tag":"FOLD","cls":"fold","txt":"弃牌，但是先问一句\"你有什么？\"","scores":{"TRV":2,"PSY":2}}]},{"id":"trv4","dim":"TRV","tag":"River · 价值还是诈唬","ctx":"$2/$5，你在BTN手牌 <span class=\"cards\">7♦ 6♦</span>。全程抽同花+顺子未中，河牌 <span class=\"cards\">2♥</span> 砖头一块。牌面 <span class=\"cards\">K♠ J♦ 9♦ 4♣ 2♥</span>。对手（情绪型玩家，前20分钟输了大底池）check。底池$90，你有$250。","ask":"彻底没打中，对手先check，对手情绪不稳，你怎么办？","opts":[{"tag":"CHECK","cls":"check","txt":"Check，没牌就算了，收摊。","scores":{"TRV":2,"PSY":3}},{"tag":"BET","cls":"raise","txt":"bet $50，小额探针，看他反应。","scores":{"TRV":3,"READ":3}},{"tag":"BET","cls":"raise","txt":"bet $90（全底池），情绪型玩家更容易call，但也更容易弃牌。","scores":{"TRV":2,"PSY":2}},{"tag":"BET","cls":"raise","txt":"all-in $250！情绪玩家肯定弃牌！","scores":{"TRV":2,"PSY":1}}]},{"id":"trv5","dim":"TRV","tag":"Turn · 被check-raise","ctx":"$1/$2，你在BTN手牌 <span class=\"cards\">T♠ T♣</span>。翻牌 <span class=\"cards\">9♦ 4♥ 2♣</span>，你bet被call。Turn <span class=\"cards\">3♦</span>（底部顺子可能性低）。对手check-raise你到$80（你bet $25，他加到$80）。底池$50之前。你有$350。","ask":"Turn被check-raise，持超对，你怎么应对？","opts":[{"tag":"FOLD","cls":"fold","txt":"弃牌。Turn的check-raise太strong，TT让步。","scores":{"TRV":3,"READ":3}},{"tag":"CALL","cls":"call","txt":"跟注，继续看river，不扩大损失。","scores":{"TRV":2,"READ":2}},{"tag":"RAISE","cls":"raise","txt":"3-bet to $220，代表value还击！","scores":{"TRV":2,"PSY":2}},{"tag":"FOLD","cls":"fold","txt":"弃牌。你记住，下一手一定报仇。","scores":{"TRV":2,"PSY":1}}]},{"id":"trv6","dim":"TRV","tag":"River · 薄价值","ctx":"$2/$5，你在CO手牌 <span class=\"cards\">A♣ J♠</span>。牌面 <span class=\"cards\">A♦ 9♣ 6♦ 2♥ K♠</span>，没有明显听牌。你全程check-call，到河牌对手check。底池$60，你有$400。","ask":"你有顶对，到河牌对手check，你怎么做？","opts":[{"tag":"CHECK","cls":"check","txt":"Check，已经是最后一街，收好底池就行。","scores":{"TRV":2,"PSY":3}},{"tag":"BET","cls":"raise","txt":"薄价值bet $25，争取被更差的牌跟注。","scores":{"TRV":3,"READ":3}},{"tag":"BET","cls":"raise","txt":"bet $60（全底池），最大价值！","scores":{"TRV":2,"READ":2}},{"tag":"BET","cls":"raise","txt":"bet $200，别白白浪费这个底池。","scores":{"TRV":1,"PSY":1}}]},{"id":"trv7","dim":"TRV","tag":"River · 接近All-in决策","ctx":"锦标赛，最终桌8人。盲注$500/$1000。你有 <span class=\"cards\">Q♣ Q♦</span>，翻前3-bet被call，对手是筹码领先者（松凶，这局赢了好几个底池，正在飘）。全程三街bet后，对手在河牌面 <span class=\"cards\">K♦ J♦ 7♣ 2♠ 5♥</span> 突然下注$18000（相当于你全部筹码的90%）。","ask":"河牌被对手大额bet，QQ面对KJ7 25牌面，怎么做？","opts":[{"tag":"FOLD","cls":"fold","txt":"弃牌。QQ在这个牌面很脆弱。","scores":{"TRV":3,"READ":3}},{"tag":"CALL","cls":"call","txt":"跟注。松凶对手可能诈唬，赔率够。","scores":{"TRV":2,"READ":3}},{"tag":"CALL","cls":"call","txt":"跟注，反正输了也无所谓。","scores":{"TRV":1,"PSY":1}},{"tag":"FOLD","cls":"fold","txt":"弃牌，然后开始复盘分析自己哪里出了问题。","scores":{"TRV":3,"PSY":3}}]},{"id":"read1","dim":"READ","tag":"读人 · 身体语言","ctx":"$2/$5 线下俱乐部。你在HJ手牌 <span class=\"cards\">J♠ J♦</span>，开牌被BTN（第一次见面，40岁男性，西装笔挺）3-bet。在他下注时，你注意到他嘴角微微上扬，手指轻轻敲了一下桌子，然后保持静止。","ask":"根据这些tells，你怎么判断并行动？","opts":[{"tag":"CALL","cls":"call","txt":"跟注。这些动作不够可靠，仅参考位置和范围。","scores":{"READ":3,"PRE":2}},{"tag":"FOLD","cls":"fold","txt":"弃牌。他很自信，可能有大牌。","scores":{"READ":2,"PSY":2}},{"tag":"4BET","cls":"raise","txt":"4-bet，他显得太放松反而可能是诈唬。","scores":{"READ":2,"PSY":2}},{"tag":"CALL","cls":"call","txt":"跟注，然后全程盯着他眼睛，寻找更多信息。","scores":{"READ":3,"PSY":2}}]},{"id":"read2","dim":"READ","tag":"读人 · 下注模式","ctx":"在线9人桌，这个对手（HUD显示：VPIP 62，PFR 8）今天已经连续赢了三个底池，每次都是用相同的操作：翻前跟注，翻牌check，turn donk小额bet赢底池。你拿着 <span class=\"cards\">A♦ K♦</span>，他又一次turn donk到你，牌面 <span class=\"cards\">Q♠ J♥ 2♦ 7♣</span>。底池$45，他bet $15。","ask":"根据他的固定模式，你怎么应对？","opts":[{"tag":"FOLD","cls":"fold","txt":"弃牌。没打中就走。","scores":{"READ":1,"PRE":2}},{"tag":"CALL","cls":"call","txt":"跟注，看他到底是模式还是真有牌。","scores":{"READ":2,"TRV":2}},{"tag":"RAISE","cls":"raise","txt":"raise，打破他的节奏，他的donk bet可能是弱牌。","scores":{"READ":3,"TRV":3}},{"tag":"CALL","cls":"call","txt":"跟注，但内心默默记下他的模式。","scores":{"READ":3,"PSY":2}}]},{"id":"read3","dim":"READ","tag":"读人 · 情绪状态","ctx":"线下poker room，你的右手边坐着一位玩家（Lisa），她今晚输了三个大底池（每次都在river被击中），现在明显处于tilt状态——不断抱怨运气，每手牌都叫得很大。你手里是 <span class=\"cards\">8♠ 8♦</span>，Lisa在你前面raise all-in $120（她还有$80剩余）。","ask":"面对情绪失控玩家的push，你怎么处理？","opts":[{"tag":"FOLD","cls":"fold","txt":"弃牌。即使她tilt，all-in的范围也可能有强牌。","scores":{"READ":2,"PSY":3}},{"tag":"CALL","cls":"call","txt":"跟注！Tilt玩家push范围极宽，88胜率不错。","scores":{"READ":3,"PSY":3}},{"tag":"CALL","cls":"call","txt":"跟注，反正我今天也输了钱，赌一把。","scores":{"READ":1,"PSY":1}},{"tag":"RAISE","cls":"raise","txt":"再加注隔离，不让其他人加入。","scores":{"READ":3,"TRV":2}}]},{"id":"read4","dim":"READ","tag":"读人 · 下注size解读","ctx":"$1/$2，你在BTN手牌 <span class=\"cards\">T♦ T♠</span>。一个从未见过的玩家在UTG open $15（7.5BB，远超正常size），其他人都fold到你。该玩家整局很安静，从未bluff过，到目前为止赢的底池都是强牌。","ask":"如何解读他这个超大size的开牌？","opts":[{"tag":"CALL","cls":"call","txt":"跟注，位置在后，看翻牌再说。","scores":{"READ":2,"PRE":2}},{"tag":"FOLD","cls":"fold","txt":"弃牌。超大size通常代表他想保护强牌，TT可能被dominate。","scores":{"READ":3,"PRE":3}},{"tag":"3BET","cls":"raise","txt":"3-bet到$50，用TT发动攻势，看他怎么反应。","scores":{"READ":2,"PRE":2}},{"tag":"CALL","cls":"call","txt":"跟注，然后在任何A/K/Q牌面都放弃。","scores":{"READ":3,"FLP":2}}]},{"id":"psy1","dim":"PSY","tag":"心理 · 连续失利后","ctx":"你今天已经输了3个大底池，全部都是river被打爆（对手的运气好到离谱）。累计损失6个买入。现在手里是 <span class=\"cards\">A♥ A♠</span>，翻前被对手（刚才击败你的那个人）3-bet。","ask":"拿到AA，面对\"仇人\"的3-bet，你怎么打？","opts":[{"tag":"4BET","cls":"raise","txt":"冷静4-bet到合适的size，正常价值打法。","scores":{"PSY":3,"PRE":3}},{"tag":"CALL","cls":"call","txt":"跟注，慢玩，引诱他继续bluff。","scores":{"PSY":3,"PRE":2}},{"tag":"ALL-IN","cls":"allin","txt":"直接all-in！AA就要堆筹码，今天必须赢回来！","scores":{"PSY":1,"PRE":2}},{"tag":"4BET","cls":"raise","txt":"4-bet，但在心里骂他是运气鬼。","scores":{"PSY":2,"PRE":3}}]},{"id":"psy2","dim":"PSY","tag":"心理 · 大赢后的心态","ctx":"你今晚大赢，已经在盈利8个买入。刚刚赢了本局最大底池（对手在river用TPTK call了你的价值raise）。你状态极佳，感觉今晚什么牌都能赢。现在手里是 <span class=\"cards\">6♦ 4♦</span> 在UTG。","ask":"大赢后，拿到64s在UTG，你怎么打？","opts":[{"tag":"FOLD","cls":"fold","txt":"弃牌。大赢手感好，但64s在UTG还是太弱。","scores":{"PSY":3,"PRE":3}},{"tag":"LIMP","cls":"call","txt":"Limp进来，感觉今晚很顺，看看翻牌。","scores":{"PSY":2,"PRE":1}},{"tag":"RAISE","cls":"raise","txt":"开牌raise！状态好的时候就要多打主动！","scores":{"PSY":1,"PRE":1}},{"tag":"FOLD","cls":"fold","txt":"弃牌，但是感觉自己无所不能，随时可能改变主意。","scores":{"PSY":2,"PRE":2}}]},{"id":"psy3","dim":"PSY","tag":"心理 · 面对嘲讽","ctx":"线下牌桌，旁边有个玩家（Alex）在上一手牌中嘲笑你的打法（\"这都能call？\"）。这一手你拿着 <span class=\"cards\">K♦ K♠</span>，Alex在你前面开牌到$15。你知道这是一手标准的3-bet牌。","ask":"对手刚嘲讽过你，现在你有KK，怎么打？","opts":[{"tag":"3BET","cls":"raise","txt":"3-bet到$45，正常价值打法，与情绪无关。","scores":{"PSY":3,"PRE":3}},{"tag":"CALL","cls":"call","txt":"跟注，隐藏手牌，慢玩让他多下注。","scores":{"PSY":3,"PRE":2}},{"tag":"3BET","cls":"raise","txt":"3-bet到$80！让他知道谁才是真正的高手！","scores":{"PSY":1,"PRE":2}},{"tag":"ALL-IN","cls":"allin","txt":"直接all-in，KK打你这种嘴炮必须全下！","scores":{"PSY":1,"PRE":1}}]},{"id":"psy4","dim":"PSY","tag":"心理 · 长时间等牌后","ctx":"你已经坐在牌桌上2小时，拿到的最好手牌是QJo（已经fold了），大部分时间在发牌圈等待。终于等来 <span class=\"cards\">J♥ T♣</span>（in MP），前面有一个tight-aggressive玩家开牌到$12。","ask":"等了2小时终于有手还过得去的牌，你怎么打？","opts":[{"tag":"FOLD","cls":"fold","txt":"弃牌。JTo面对TAG玩家的开牌，赔率不够。","scores":{"PSY":3,"PRE":3}},{"tag":"CALL","cls":"call","txt":"跟注$12，用隐含赔率玩连接牌。","scores":{"PSY":2,"PRE":2}},{"tag":"RAISE","cls":"raise","txt":"3-bet，等了这么久，不能白等！","scores":{"PSY":1,"PRE":1}},{"tag":"CALL","cls":"call","txt":"跟注，但是心里想着\"这次一定要中\"。","scores":{"PSY":1,"PRE":2}}]}]</script>
+<script type="application/json" id="thti-t-data">[{"id":"FISH","name":"鱼儿","code":"FISH-y","emoji":"🐟","funny":"又名\"行走的提款机预备役\"。你打牌的方式让庄家想给你颁发\"最佳捐款人\"奖。恭喜你，每桌都欢迎你的到来——就像欢迎一个免费ATM。","desc":"你的牌桌风格充满随性，hand selection偏宽，常常追逐底牌，在没有胜算时拒绝放弃。也许你觉得牌局的乐趣在于参与，而不是计算期望值。有时候运气眷顾了你，但长期来看，牌桌会对你的账户表示感谢。","dims":{"PRE":2,"FLP":2,"TRV":2,"READ":2,"PSY":2}},{"id":"SHARK","name":"鲨鱼","code":"SHAR-K","emoji":"🦈","funny":"你大概是整桌人里唯一在用\"期望值\"思考问题的。其他人打牌靠感情，你打牌靠微积分。","desc":"强大的手牌选择和主动打法是你的标志。你在翻前就开始布局，翻后能根据牌面和对手信息做出精准决策。你既能value bet，也能合理bluff。如果说牌桌是战场，你大概是那个带了地图来的人。","dims":{"PRE":9,"FLP":8,"TRV":8,"READ":8,"PSY":9}},{"id":"CALLER","name":"跟注站","code":"CALL-er","emoji":"📞","funny":"\"fold？那不是弃牌，那是认输！\" 你的人生哲学是：只要跟注，就有机会。结果就是，牌桌给你的机会是连续亏损。","desc":"你极少主动发起攻势，更习惯跟注和check。你相信\"看到最后才知道谁赢\"，忽视了大量的implied odds计算和位置优势。牌桌上的人都爱你，因为你从不bluff，也从不fold。","dims":{"PRE":3,"FLP":3,"TRV":4,"READ":4,"PSY":5}},{"id":"BLUFFER","name":"诈唬王","code":"BLUFF-er","emoji":"🎭","funny":"\"我每次bluff都有道理的！\" 对的，就像皇帝每件新衣都有设计感一样。","desc":"你对诈唬有着不寻常的热情，甚至在不需要bluff的时候也会动用这个工具。你的bluff频率让对手困惑，有时候确实奏效，但long run的success rate……我们不提了。","dims":{"PRE":5,"FLP":6,"TRV":5,"READ":5,"PSY":5}},{"id":"NIT","name":"紧蛋","code":"NIT-y","emoji":"🥚","funny":"你上一次voluntarily进底池是什么时候？也许是上个月？你把牌桌当作冥想课，等到AA才动手。","desc":"你的手牌范围极窄，折叠率全桌最高。你的口号是\"宁可错过，不可错进\"。优点是你的赢率稳定，缺点是每小时期望值低到可以忽略不计，而且其他玩家已经知道当你加注时该怎么做了。","dims":{"PRE":7,"FLP":6,"TRV":6,"READ":6,"PSY":8}},{"id":"LOOSER","name":"松鱼","code":"LOOS-er","emoji":"🎣","funny":"你把Junk hands称为\"连接牌的潜力股\"。72o在你眼里也是suitable的——因为\"万一翻牌是77或22呢\"。","desc":"你进入的底池数量远超最优化值。对你来说，每张牌都有潜在价值，每个位置都适合参与。这种宽松风格偶尔能钓到大鱼，但大多数时候，你才是那条鱼。","dims":{"PRE":3,"FLP":3,"TRV":3,"READ":3,"PSY":4}},{"id":"SHOVER","name":"全下侠","code":"SHOVE-r","emoji":"💰","funny":"\"All-in是解决一切问题的答案。\" 你简化了整个决策树，砍掉了所有的中间节点，直接goto最终结果。效率极高，但结局……","desc":"你喜欢用筹码说话，而且一说就是全部。你的打法直接、霸气，减少了复杂的多街博弈，但也失去了大量EV。你在牌桌上像一把重锤，可惜很多时候螺丝钉比重锤更有用。","dims":{"PRE":5,"FLP":6,"TRV":5,"READ":4,"PSY":4}},{"id":"RIVERK","name":"河杀手","code":"RIVER-K","emoji":"🌊","funny":"你的得意传说总是：\"然后河牌出了一张……\"。你和river之间有一种奇妙的缘分，不管是你kill别人，还是river kill你。","desc":"你对river action情有独钟，无论是value bet、诈唬，还是接受命运的残酷。你在river card上花费的注意力超过任何一条街。你对后门牌和backdoor draws的执着让对手摸不着头脑。","dims":{"PRE":4,"FLP":4,"TRV":6,"READ":5,"PSY":4}},{"id":"LUCKY","name":"脸帝","code":"LUCK-y","emoji":"🍀","funny":"\"我不是运气好，是我感应到了宇宙的振动频率！\" 请问那个频率能不能分享一下坐标？","desc":"你深信自己与幸运女神有特殊联系。每次bad beat你归因于对手运气，每次赢牌你归因于自己的直觉。统计数据可能不同意，但你的快乐是真实的。而且谁说不行呢，有时候脸确实最重要。","dims":{"PRE":4,"FLP":4,"TRV":4,"READ":3,"PSY":3}},{"id":"TILTER","name":"上头者","code":"TILT-er","emoji":"🔥","funny":"\"我这不是tilt，这是战术愤怒！\" 对，就像火山不是爆发，而是进行地质表演一样。","desc":"你的情绪在牌桌上是公开透明的。输了一手牌后，你的加注频率显著上升，hand selection显著下降。你是对手最喜欢坐在旁边的那种玩家——因为情绪波动会让你做出不理性的决策。","dims":{"PRE":3,"FLP":3,"TRV":3,"READ":4,"PSY":2}},{"id":"COACHER","name":"复盘教练","code":"COACH-er","emoji":"📊","funny":"\"这手牌从EV的角度来说，你的check-call是一个严重的错误，正确的做法应该是……\" 牌桌是你的教室，其他人是你的学生，不管他们愿不愿意听。","desc":"你对牌理有较深的理解，且乐于分享（有时候是强迫分享）。你能分析自己和他人的错误，复盘能力强。但有时候过于理论化，在实战中反应慢，或者因为知道太多而在边缘情况里过度纠结。","dims":{"PRE":7,"FLP":6,"TRV":7,"READ":7,"PSY":6}},{"id":"GTOER","name":"GTO信徒","code":"GTO-er","emoji":"🤖","funny":"\"根据我的求解器，这里的最优混合策略是23%的raise，41%的call，36%的fold。\" 你在$1/$2的牌桌上解方程，就像在用卫星定位找厕所。","desc":"你研究过solver，知道balance和range的概念。你的打法经过理论验证，很少犯明显的错误。但你有时候忘记了对手并不是GTO bot，对一些明显的exploitative机会反应迟钝。","dims":{"PRE":8,"FLP":8,"TRV":7,"READ":7,"PSY":8}},{"id":"SLOWY","name":"慢玩怪","code":"SLOW-y","emoji":"🐌","funny":"\"我有AA，所以我要check。我有set，所以我要check。我有同花顺，所以我要……check。\" 你把慢玩用得比宽带提供商的网速还稳定。","desc":"你对慢玩（slowplay）有着近乎偏执的热爱。强牌check，超强牌check，nuts check——总是等到最后一秒才亮出底牌。虽然偶尔能赢大底池，但你也经常因为没有建立底池而在对手miss的情况下赢了很少。","dims":{"PRE":5,"FLP":4,"TRV":5,"READ":5,"PSY":6}},{"id":"BADB","name":"BB受害人","code":"BAD-B","emoji":"😭","funny":"\"我在BB永远是被欺负的那个！\" 统计数据显示BB确实是最难玩的位置，但你已经把它升华为了一种生活态度。","desc":"你特别在意自己在BB位置受到的不公平对待。每次被steal，每次在BB被raise，你都记在心里。你打牌时有些情绪驱动，尤其是在涉及自尊的场合。牌桌有时候是你的战场，有时候是你的心理治疗室。","dims":{"PRE":4,"FLP":4,"TRV":4,"READ":5,"PSY":3}},{"id":"TRAPER","name":"装死者","code":"TRAP-er","emoji":"🎪","funny":"\"我的check不是弱，是诱惑。\" 你最享受的时刻是对手大额下注后你缓缓翻牌，看着他的脸垮下来。","desc":"你对trap（陷阱）的运用炉火纯青。你喜欢用强牌check来引诱对手，然后在恰当的时机发动致命一击。你的打法神秘而有节制，对手很难判断你的强弱。","dims":{"PRE":6,"FLP":7,"TRV":8,"READ":7,"PSY":8}},{"id":"READER","name":"读牌大师","code":"READ-er","emoji":"🔮","funny":"\"我就知道他有K！他下注的方式，他的呼吸频率，他握筹码时小拇指弯曲的角度……\" 你是牌桌上的侦探，但有时候福尔摩斯也会推理错误。","desc":"你对对手行为模式的分析令人印象深刻。你会注意到下注size、timing、身体语言的细节，并形成完整的判断。你的read常常准确，有时候能做出看似不可思议的call或fold。","dims":{"PRE":6,"FLP":7,"TRV":7,"READ":9,"PSY":7}},{"id":"RAILER","name":"围观者","code":"RAIL-er","emoji":"🧐","funny":"\"我不是不想打，我只是在观察学习。\" 你已经观察学习了六个月了，你身边的朋友已经打了一千手牌。","desc":"你比较少参与底池，更喜欢在旁边观察。你积累了大量理论知识，对别人的打法如数家珍，但真正轮到自己出手时，总有各种理由保守行事。有时候你需要的不是更多知识，而是更多胆量。","dims":{"PRE":5,"FLP":5,"TRV":5,"READ":8,"PSY":7}},{"id":"ATM","name":"提款机","code":"ATM-2.0","emoji":"🏧","funny":"你是牌桌上最受欢迎的设施。按键流畅，出钱及时，从不报障碍。只是使用者必须持有德州扑克卡才能提取。","desc":"你在松鱼的基础上加了被动和不理智。你会用各种理由call底池，然后在被打爆后觉得对手运气太好。你的lose rate稳定而优雅，为整桌的胜者提供了稳定的EV来源。","dims":{"PRE":2,"FLP":2,"TRV":2,"READ":2,"PSY":2}}]</script>
+<script>
+(function(){
+  var _qs=[], _cur=0, _ans={};
+  
+  function shuffle(a){
+    for(var i=a.length-1;i>0;i--){
+      var j=Math.floor(Math.random()*(i+1));
+      var t=a[i];a[i]=a[j];a[j]=t;
+    }
+    return a;
+  }
+  
+  function getAllQ(){
+    var qData=JSON.parse(document.getElementById('thti-q-data').textContent);
+    var raw=qData.map(function(q){
+      var qc=JSON.parse(JSON.stringify(q));
+      qc._opts=shuffle(qc.opts.slice());
+      return qc;
+    });
+    return shuffle(raw);
+  }
+  
+  function updateProgress(){
+    var total=_qs.length;
+    var answered=Object.keys(_ans).length;
+    var pct=(answered/total)*100;
+    document.getElementById('prog-bar').style.width=pct+'%';
+    document.getElementById('prog-text').textContent=answered+' / '+total;
+  }
+  
+  function renderQ(){
+    var q=_qs[_cur];
+    var total=_qs.length;
+    updateProgress();
+    var isAnswered=(_ans[q.id]!==undefined);
+    
+    var optsHtml=q._opts.map(function(opt,i){
+      var sel=(_ans[q.id]===i)?' selected':'';
+      // If answered, lock all buttons; selected one stays highlighted
+      var lock=isAnswered?' locked':'';
+      return '<button class="opt-btn'+sel+lock+'" '+(isAnswered?'disabled':'')+' onclick="thtiSelect('+i+')"><span class="opt-tag '+opt.cls+'">'+opt.tag+'</span>'+opt.txt+'</button>';
+    }).join('');
+    
+    document.getElementById('q-area').innerHTML=
+      '<div class="q-card">'+
+      '<div class="q-tag">'+q.tag+'</div>'+
+      '<div class="q-context">'+q.ctx+'</div>'+
+      '<div class="q-ask">'+q.ask+'</div>'+
+      '<div class="options">'+optsHtml+'</div>'+
+      '</div>';
+    
+    // No nav buttons - handled inline
+    // Show submit only when all answered and on last
+    var isLast=(_cur===total-1);
+    var allAns=(Object.keys(_ans).length===total);
+    var sub=document.getElementById('btn-submit');
+    if(isLast&&allAns){
+      sub.classList.add('visible');
+    } else {
+      sub.classList.remove('visible');
+    }
+  }
+  
+  window.thtiSelect=function(idx){
+    var q=_qs[_cur];
+    if(_ans[q.id]!==undefined) return; // already answered, ignore
+    _ans[q.id]=idx;
+    renderQ(); // re-render to lock options
+    
+    // Advance after delay
+    if(_cur<_qs.length-1){
+      setTimeout(function(){
+        _cur++;
+        renderQ();
+        // Scroll to top of quiz area
+        var qa=document.getElementById('q-area');
+        if(qa) qa.scrollIntoView({behavior:'smooth',block:'start'});
+      },480);
+    } else {
+      // Last question - show submit after short delay
+      setTimeout(function(){
+        var sub=document.getElementById('btn-submit');
+        if(sub) sub.classList.add('visible');
+        sub.scrollIntoView({behavior:'smooth',block:'center'});
+      },500);
+    }
+  };
+  
+  // nav disabled (no back)
+  window.thtiNav=function(dir){ /* locked */ };
+  
+  function calcScores(){
+    var raw={PRE:0,FLP:0,TRV:0,READ:0,PSY:0};
+    var dimMax={PRE:0,FLP:0,TRV:0,READ:0,PSY:0};
+    
+    _qs.forEach(function(q){
+      var qMax={PRE:0,FLP:0,TRV:0,READ:0,PSY:0};
+      q._opts.forEach(function(opt){
+        Object.keys(opt.scores).forEach(function(d){
+          if(qMax[d]!==undefined) qMax[d]=Math.max(qMax[d],opt.scores[d]);
+        });
+      });
+      Object.keys(qMax).forEach(function(d){ dimMax[d]+=qMax[d]; });
+    });
+    
+    _qs.forEach(function(q){
+      var si=_ans[q.id];
+      if(si===undefined||si===null) return;
+      var opt=q._opts[si];
+      Object.keys(opt.scores).forEach(function(d){
+        if(raw[d]!==undefined) raw[d]+=opt.scores[d];
+      });
+    });
+    
+    var sc={};
+    ['PRE','FLP','TRV','READ','PSY'].forEach(function(d){
+      if(!dimMax[d]){sc[d]=5;return;}
+      sc[d]=Math.round((raw[d]/dimMax[d])*10);
+    });
+    return sc;
+  }
+  
+  function matchType(sc){
+    var P=sc.PRE,F=sc.FLP,T=sc.TRV,R=sc.READ,Ps=sc.PSY;
+    var avg=(P+F+T+R+Ps)/5;
+    if(Ps<=2&&P<=3&&F<=3&&T<=3) return 'TILTER';
+    if(P<=2&&F<=2&&T<=2&&R<=3&&Ps<=2) return 'FISH';
+    if(Ps<=2) return 'TILTER';
+    if(P<=3&&R>=6) return 'RAILER';
+    if(P<=3&&F<=3) return 'RAILER';
+    if(Ps>=8&&P>=7&&F>=7&&T>=7&&R>=7) return 'SHARK';
+    if(P>=7&&F>=7&&T>=7&&R>=7&&Ps>=7) return 'GTOER';
+    if(R>=8&&Ps>=7&&T>=7) return 'READER';
+    if(Ps>=8&&T>=6&&F<=6&&P>=5) return 'TRAPER';
+    if(P>=7&&Ps>=7&&T>=7&&avg>=7) return 'COACHER';
+    if(P>=7&&F<=5&&Ps>=6) return 'NIT';
+    if(R>=7&&Ps>=6&&T>=5) return 'READER';
+    if(F>=7&&T>=6&&Ps>=6&&avg<8) return 'TRAPER';
+    if(F<=3&&T<=3&&P>=4&&Ps>=4) return 'LOOSER';
+    if(P>=5&&F<=4&&Ps<=4) return 'BLUFFER';
+    if(T<=4&&F<=4&&Ps<=4) return 'RIVERK';
+    if(P>=4&&F<=4&&T<=4&&Ps<=3) return 'ATM';
+    if(P>=4&&F>=5&&T<=4&&Ps>=5) return 'SLOWY';
+    if(Ps<=4&&R<=4&&avg>=4) return 'CALLER';
+    if(avg>=5&&avg<7&&Ps>=4&&R>=5) return 'BADB';
+    if(avg>=5&&avg<7&&Ps<=4) return 'LUCKY';
+    if(P>=5&&T>=5&&Ps>=5&&avg>=5) return 'SHOVER';
+    if(F<=4&&T<=4) return 'LOOSER';
+    return 'FISH';
+  }
+  
+  window.thtiSubmit=function(){
+    var sc=calcScores();
+    var tid=matchType(sc);
+    var types=JSON.parse(document.getElementById('thti-t-data').textContent);
+    var type=types.find(function(t){return t.id===tid;})||types[0];
+    var td=type.dims;
+    
+    document.getElementById('screen-quiz').style.display='none';
+    document.getElementById('screen-result').style.display='block';
+    document.getElementById('r-emoji').textContent=type.emoji;
+    document.getElementById('r-name').textContent=type.name;
+    document.getElementById('r-code').textContent=type.code;
+    
+    var diff=['PRE','FLP','TRV','READ','PSY'].reduce(function(s,d){return s+Math.abs((td[d]||5)-sc[d]);},0);
+    var mp=Math.max(60,Math.round(100-diff*3));
+    document.getElementById('r-match').textContent='匹配度 '+mp+'%';
+    
+    var dLabels={PRE:'翻前判断',FLP:'Flop应对',TRV:'Turn/River',READ:'读人能力',PSY:'心理素质'};
+    var dColors={PRE:'#d4a017',FLP:'#e0742a',TRV:'#c0392b',READ:'#2ecc71',PSY:'#3498db'};
+    
+    var sh='';
+    ['PRE','FLP','TRV','READ','PSY'].forEach(function(d){
+      var v=sc[d];
+      sh+='<div class="score-row"><div class="score-label">'+dLabels[d]+'</div><div class="score-bar-wrap"><div class="score-bar-fill" style="width:'+v*10+'%;background:'+dColors[d]+'"></div></div><div class="score-val">'+v+'/10</div></div>';
+    });
+    document.getElementById('score-rows').innerHTML=sh;
+    document.getElementById('r-funny').textContent=type.funny;
+    document.getElementById('r-desc').textContent=type.desc;
+    window.scrollTo(0,0);
+  };
+  
+  // Show intro screen first
+  window.thtiStart=function(){
+    document.getElementById('screen-home').style.display='none';
+    document.getElementById('screen-intro').style.display='flex';
+    window.scrollTo(0,0);
+  };
+  
+  // Deal cards - start actual quiz
+  window.thtiDeal=function(){
+    _qs=getAllQ();_cur=0;_ans={};
+    document.getElementById('screen-intro').style.display='none';
+    document.getElementById('screen-quiz').style.display='block';
+    window.scrollTo(0,0);
+    renderQ();
+  };
+  
+  window.thtiRetry=function(){
+    document.getElementById('screen-result').style.display='none';
+    document.getElementById('screen-home').style.display='flex';
+    window.scrollTo(0,0);
+  };
+})();
+</script>
+</body>
+</html>
